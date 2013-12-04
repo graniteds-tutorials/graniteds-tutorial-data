@@ -1,0 +1,109 @@
+== The Spring server application
+:icons: font
+:rootdir: ../../../..
+:srcdir: {rootdir}/server-spring/src
+
+The server application is a Spring service which implements basic CRUD operations on user accounts in an in-memory HSQL database.
+The updates on the persistent entities are dispatched to other clients though a messaging destination.
+
+The necessary configuration for GraniteDS is relatively easy and consists in:
+
+* adding a listener in +web.xml+ to bootstrap GraniteDS when the application starts,
+* adding a Spring dispatcher servlet to handle remoting requests,
+* adding a Gravity asynchronous messaging servlet to handle long-polling connections,
+* declaring GraniteDS in the Spring application context,
+* declaring a messaging destination in the Spring application context
+
+The first important file is the web application +web.xml+ which contains the basic Spring and GraniteDS setup:
+
+[source,xml,indent=0]
+.main/webapp/WEB-INF/web.xml
+----
+include::{srcdir}/main/webapp/WEB-INF/web.xml[tags=webxml-spring]
+----
+
+And the basic GraniteDS setup (bootstrap servlet listener, remoting servlet and asynchronous messaging servlet):
+
+[source,xml,indent=0]
+.main/webapp/WEB-INF/web.xml
+----
+include::{srcdir}/main/webapp/WEB-INF/web.xml[tags=webxml-graniteds]
+----
+<1> GraniteDS bootstrap servlet listener
+<2> Url mapping of the dispatcher servlet for GraniteDS, +/graniteamf/*+ is the recommended default
+<3> Url mapping of the asynchronous servlet for GraniteDS, +/gravityamf/*+ is the recommended default
+
+The actual Spring application context is defined in +application-context.xml+, the declaration of GraniteDS simply
+consists in the +graniteds+ XML namespace declaration:
+
+[source,xml,indent=0]
+.main/resources/application-context.xml
+----
+include::{srcdir}/main/resources/application-context.xml[tags=namespace]
+----
+
+And the following bean, which registers GraniteDS in the Spring context. It declares that the remoting is using the Tide API,
+and defines the url mapping +/\*+ meaning that all requests on the dispatcher servlet, i.e. on +/data/graniteamf/*+ will
+be routed to GraniteDS. This is the recommended default.
+
+[[server.config]]
+[source,xml,indent=0]
+.main/resources/application-context.xml
+----
+include::{srcdir}/main/resources/application-context.xml[tags=graniteds-config]
+----
+
+Next we have to declare the data messaging destination (see the <<client.destination,client application>> where the matching
+client object is created):
+
+[[server.destination]]
+[source,java,indent=0]
+.main/resources/application-context.xml
+----
+include::{srcdir}/main/resources/application-context.xml[tags=messaging-destination]
+----
+
+The data model is a standard JPA entity with a few particularities:
+
+[source,java,indent=0]
+.main/java/org/graniteds/tutorial/data/entities/Account.java
+----
+include::{modelsrcdir}/main/java/org/graniteds/tutorial/data/entities/Account.java[tags=entity]
+----
+<1> The +DataPublishListener+ entity listener tracks update events on the entity and should be used in conjunction with
+the +@DataEnabled+ annotations on services (see below).
+<2> The entity must be +Serializable+.
+<3> It's recommended (though not mandatory) that the entity uses optimistic locking with a numeric +@Version+ property.
+This is necessary for proper concurrent modifications detection.
+<4> It's recommended (though again not mandatory) that the entity has a persistent +uid+ property which is not the database
+primary key. The goal is to have a unique key on the entity instance during its full lifecycle (from the client to the
+ service and the database, and back). Usually this +uid+ will be initialized by the client (it's handled automatically by
+ the framework).
+<5> Bean validation annotations can be used and will be propagated by the code generator to the client classes.
+<6> The +@Include+ annotation can be used to specify computed properties which are not persistent but should be serialized
+with the entity and will be evaluated on the server during serialization.
+
+The service is a simple Spring bean which implements the following interface:
+
+[source,java,indent=0]
+.main/java/org/graniteds/tutorial/data/services/AccountService.java
+----
+include::{modelsrcdir}/main/java/org/graniteds/tutorial/data/services/AccountService.java[tags=service]
+----
+<1> The service interface is annotated with +@RemoteDestination+ to enable remote access from the client.
+<2> The service interface is annotated with +@DataEnabled+ to indicate GDS that it has to track and send updates made on entities
+during the execution of service methods. Updates will be sent on the specified topic, here +dataTopic+.
+
+Here is the bean implementation:
+
+[source,java,indent=0]
+.main/java/org/graniteds/tutorial/data/services/AccountServiceImpl.java
+----
+include::{srcdir}/main/java/org/graniteds/tutorial/data/services/AccountServiceImpl.java[tags=service-impl]
+----
+<1> Note the use of +merge+ to apply the changes coming from the client which are detached entities.
+<2> The method +findByFilter+ has a specific signature +Page(Map, PageInfo)+ and implements the necessary support for
+server-side paging and sorting. See the class +AccountSearch+ for the actual implementation using the JPA Criteria API.
+
+NOTE: It would also be possible to directly use a Spring Data JPA repository instead of implementing these methods
+manually.
