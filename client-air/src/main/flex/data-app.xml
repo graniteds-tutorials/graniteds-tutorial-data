@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<application xmlns="http://ns.adobe.com/air/application/2.6">
+    <id>org.graniteds.tutorial.data</id>
+    <filename>data</filename>
+    <name>GraniteDS Data Tutorial</name>
+    <versionNumber>1.0.0</versionNumber>
+	
+    <initialWindow>
+        <title>GraniteDS Data Tutorial</title>
+        <content>data.swf</content>
+        <width>360</width>
+        <height>400</height>
+        <visible>true</visible>
+    </initialWindow>
+</application>

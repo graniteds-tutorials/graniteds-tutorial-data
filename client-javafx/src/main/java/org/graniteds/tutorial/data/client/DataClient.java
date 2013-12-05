@@ -34,6 +34,7 @@ import org.granite.client.javafx.tide.collections.PagedCollection;
 import org.granite.client.javafx.tide.collections.PagedQuery;
 import org.granite.client.javafx.tide.server.FXTideResponders;
 import org.granite.client.tide.Context;
+import org.granite.client.tide.ContextManager;
 import org.granite.client.tide.data.DataObserver;
 import org.granite.client.tide.impl.SimpleContextManager;
 import org.granite.client.tide.server.*;
@@ -47,25 +48,26 @@ import java.util.Map;
 public class DataClient extends Application {
 
     /**
-     * Main method which lauches the JavaFX application
+     * Main method which launches the JavaFX application
      */
     public static void main(String[] args) {
         Application.launch(DataClient.class, args);
     }
 
-    private Context context;
+    // tag::client-init[]
+    public static Context context = new SimpleContextManager(new JavaFXApplication()).getContext();
+    // end::client-init[]
 
     @Override
     public void start(Stage stage) throws Exception {
         // tag::client-setup[]
-        context = new SimpleContextManager(new JavaFXApplication()).getContext(); // <1>
         final ServerSession serverSession = context.set(
                 new ServerSession("/data", "localhost", 8080)); // <2>
         serverSession.addRemoteAliasPackage("org.graniteds.tutorial.data.client"); // <3>
         serverSession.start(); // <4>
         // end::client-setup[]
 
-        final PagedQuery<Account, ObservableMap<String, String>> accountsQuery = context.set(new PagedQuery<Account, ObservableMap<String, String>>(serverSession));
+        final PagedQuery<Account, Map<String, String>> accountsQuery = context.set(new PagedQuery<Account, Map<String, String>>(serverSession));
         accountsQuery.setMaxResults(40);
         accountsQuery.setMethodName("findByFilter");
         accountsQuery.setElementClass(Account.class);
@@ -92,7 +94,7 @@ public class DataClient extends Application {
 
         final StackPane stackPane = new StackPane();
         stackPane.setMaxWidth(Double.MAX_VALUE);
-        stackPane.setStyle("-fx-padding: 0 0 0 0");
+        stackPane.setPadding(new Insets(0));
         vbox.getChildren().add(stackPane);
 
         final VBox listPane = new VBox();
@@ -326,6 +328,9 @@ public class DataClient extends Application {
             buttonBar.getChildren().add(saveButton);
             buttonBar.getChildren().add(deleteButton);
             buttonBar.getChildren().add(cancelButton);
+
+            deleteButton.visibleProperty().bind(account.savedProperty());
+            deleteButton.managedProperty().bind(account.savedProperty());
 
             getChildren().add(buttonBar);
 

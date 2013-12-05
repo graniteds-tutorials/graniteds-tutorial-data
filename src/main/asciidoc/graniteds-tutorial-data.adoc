@@ -1,9 +1,9 @@
 :rootdir: ../../..
 
-= GraniteDS data Tutorial
+= GraniteDS Data Tutorial
 
-This tutorial shows how to build a simple server data application where the server publishes information to all
-subscribed clients using a GraniteDS long polling channel.
+This tutorial shows how to build a simple data application that managed a database of user accounts. All connected clients are
+notified and synchronized with data updates using a GraniteDS long polling channel.
 
 If you are looking at this document in html format, you have likely already built the project.
 
@@ -55,9 +55,19 @@ mvn tomcat7:run-war
 ----
 endif::[]
 
-.JBoss AS 7.1
+.JBoss AS 7.2
 ----
-mvn jboss-as:run
+mvn jboss-as:run -Djboss-as.version=7.2.0.Final
+----
+
+NOTE
+----
+JBoss AS 7.1 has bugs or limitations which prevent the tutorial from working out of the box, thus using JBoss AS 7.2 is required.
+However JBoss AS 7.2 is not directly available from Maven Central, so you first have to download it from
+http://www.jboss.org/jbossas/downloads/[here] (it's named JBoss EAP 6.1.0.Final) and install it in your local Maven repository with:
+----
+mvn install:install-file -DgroupId=org.jboss.as -DartifactId=jboss-as-dist -Dversion=7.2.0.Final -Dpackaging=zip -Dfile=/path/to/jboss
+----
 ----
 
 .GlassFish 3.1.2.2

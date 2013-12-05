@@ -13,7 +13,13 @@
         <option value="$PROJECT_DIR$/server-cdi/pom.xml" />
         <option value="$PROJECT_DIR$/server-spring/pom.xml" />
         <option value="$PROJECT_DIR$/server-ejb/pom.xml" />
+        <option value="$PROJECT_DIR$/client-air/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/client-air/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectResources">

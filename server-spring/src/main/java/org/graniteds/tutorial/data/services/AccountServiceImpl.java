@@ -19,12 +19,13 @@ public class AccountServiceImpl implements AccountService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void save(Account user) {
-        entityManager.merge(user);
+    public void save(Account account) {
+        entityManager.merge(account);
     }
 
-    public void remove(Account user) {
-        entityManager.remove(user);
+    public void remove(Account account) {
+        entityManager.refresh(account);
+        entityManager.remove(account);
     }
 
     @Transactional(readOnly=true)
