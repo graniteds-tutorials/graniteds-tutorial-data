@@ -24,10 +24,6 @@ with the name of the property. See the client usage <<client.destination,here>>.
 +session-selector+ are necessary because we will be using this destination to dispatch updates on JPA entities and the
 client does not need to receive its own updates.
 
-It's then necessary to add an empty +META-INF/services-config.properties+ file to trigger the GraniteDS class scanner
-which will detect the EJB classes. This is a simple marker file which indicates to GraniteDS where to look for and
-prevent from scanning the whole classpath.
-
 The data model is a standard JPA entity with a few particularities:
 
 [source,java,indent=0]

@@ -5,19 +5,15 @@ import de.jensd.fx.fontawesome.AwesomeIcon;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -26,22 +22,16 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import javafx.util.StringConverter;
 import org.granite.client.javafx.tide.JavaFXApplication;
 import org.granite.client.javafx.tide.ManagedEntity;
-import org.granite.client.javafx.tide.collections.PageChangeListener;
-import org.granite.client.javafx.tide.collections.PagedCollection;
 import org.granite.client.javafx.tide.collections.PagedQuery;
-import org.granite.client.javafx.tide.server.FXTideResponders;
 import org.granite.client.tide.Context;
-import org.granite.client.tide.ContextManager;
 import org.granite.client.tide.data.DataObserver;
 import org.granite.client.tide.impl.SimpleContextManager;
-import org.granite.client.tide.server.*;
+import org.granite.client.tide.server.ServerSession;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.Map;
 
 
@@ -55,7 +45,7 @@ public class DataClient extends Application {
     }
 
     // tag::client-init[]
-    public static Context context = new SimpleContextManager(new JavaFXApplication()).getContext();
+    public static Context context = new SimpleContextManager(new JavaFXApplication()).getContext(); // <1>
     // end::client-init[]
 
     @Override
@@ -67,21 +57,25 @@ public class DataClient extends Application {
         serverSession.start(); // <4>
         // end::client-setup[]
 
+        // tag::list-setup[]
         final PagedQuery<Account, Map<String, String>> accountsQuery = context.set(new PagedQuery<Account, Map<String, String>>(serverSession));
         accountsQuery.setMaxResults(40);
         accountsQuery.setMethodName("findByFilter");
         accountsQuery.setElementClass(Account.class);
         accountsQuery.setRemoteComponentClass(AccountService.class);
+        // end::list-setup[]
 
+        // tag::form-setup[]
         final ManagedEntity<Account> account = context.set(new ManagedEntity<Account>());
+        // end::form-setup[]
 
+        // tag::data-setup[]
         final DataObserver dataObserver = context.set("dataTopic", new DataObserver(serverSession));
         dataObserver.start();
 
         dataObserver.subscribe();
-        // end::client-setup[]
+        // end::data-setup[]
 
-        // tag::client-ui[]
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(10);
@@ -106,13 +100,14 @@ public class DataClient extends Application {
         searchBox.setMaxWidth(Double.MAX_VALUE);
         searchBox.setSpacing(5);
 
+        // tag::list-ui[]
         final TextField searchField = new TextField();
         searchField.setMaxWidth(Double.MAX_VALUE);
         searchField.setMinHeight(25);
         HBox.setHgrow(searchField, Priority.ALWAYS);
         searchField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> searchText, String oldValue, String newValue) {
+            public void changed(ObservableValue<? extends String> searchText, String oldValue, String newValue) { // <1>
                 accountsQuery.getFilter().put("searchText", newValue);
                 accountsQuery.refresh();
             }
@@ -122,7 +117,7 @@ public class DataClient extends Application {
             public void handle(ActionEvent actionEvent) {
                 accountsQuery.refresh();
             }
-        });
+        }); // <2>
 
         final Button searchButton = new AwesomeButton(AwesomeIcon.SEARCH);
         searchButton.setPrefWidth(40);
@@ -135,14 +130,17 @@ public class DataClient extends Application {
         final ListView<Account> accountsView = new ListView<Account>();
         accountsView.setMaxWidth(Double.MAX_VALUE);
         accountsView.setStyle("-fx-background-color: white; -fx-border-color: #97b54b");
-        accountsView.setCellFactory(new Callback<ListView<Account>, ListCell<Account>>() {
+        accountsView.setItems(accountsQuery); // <3>
+        accountsView.setCellFactory(new Callback<ListView<Account>, ListCell<Account>>() { // <4>
             @Override
             public ListCell<Account> call(ListView<Account> userListView) {
                 return new AccountCell();
             }
         });
         listPane.getChildren().add(accountsView);
+        // end::list-ui[]
 
+        // tag::form-bind[]
         final AccountForm accountForm = new AccountForm(account);
         accountForm.setMaxWidth(Double.MAX_VALUE);
         accountForm.setMaxHeight(Double.MAX_VALUE);
@@ -151,7 +149,7 @@ public class DataClient extends Application {
 
         accountsView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
             @Override
-            public void changed(ObservableValue<? extends Account> selection, Account oldValue, Account newValue) {
+            public void changed(ObservableValue<? extends Account> selection, Account oldValue, Account newValue) { // <1>
                 account.setInstance(newValue);
             }
         });
@@ -162,17 +160,18 @@ public class DataClient extends Application {
             public void handle(ActionEvent actionEvent) {
                 account.setInstance(new Account());
             }
-        });
+        }); // <2>
         listPane.getChildren().add(newButton);
 
         accountForm.visibleProperty().addListener(new ChangeListener<Boolean>() {
             @Override
-            public void changed(ObservableValue<? extends Boolean> visible, Boolean oldVisible, Boolean newVisible) {
+            public void changed(ObservableValue<? extends Boolean> visible, Boolean oldVisible, Boolean newVisible) { // <3>
                 listPane.setDisable(newVisible);
                 if (!newVisible)
                     accountsView.getSelectionModel().clearSelection();
             }
         });
+        // end::form-bind[]
 
         stackPane.getChildren().add(listPane);
         stackPane.getChildren().add(accountForm);
@@ -181,9 +180,6 @@ public class DataClient extends Application {
         stage.setTitle("GraniteDS Data Tutorial");
         stage.setScene(scene);
         stage.show();
-
-        accountsView.setItems(accountsQuery);
-        // end::client-ui[]
 
         // tag::client-close[]
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -288,7 +284,6 @@ public class DataClient extends Application {
         }
     }
 
-
     private class AccountForm extends VBox {
 
         private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -329,14 +324,12 @@ public class DataClient extends Application {
             buttonBar.getChildren().add(deleteButton);
             buttonBar.getChildren().add(cancelButton);
 
-            deleteButton.visibleProperty().bind(account.savedProperty());
-            deleteButton.managedProperty().bind(account.savedProperty());
-
             getChildren().add(buttonBar);
 
+            // tag::form-ui[]
             account.instanceProperty().addListener(new ChangeListener<Account>() {
                 @Override
-                public void changed(ObservableValue<? extends Account> instance, final Account oldValue, final Account newValue) {
+                public void changed(ObservableValue<? extends Account> instance, final Account oldValue, final Account newValue) { // <1>
                     if (newValue != null) {
                         titleLabel.setText(account.isSaved() ? "Edit account" : "Create account");
                         nameField.textProperty().bindBidirectional(newValue.nameProperty());
@@ -373,22 +366,23 @@ public class DataClient extends Application {
             saveButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    if (!validator.validate(account.getInstance()).isEmpty())
+                    if (!validator.validate(account.getInstance()).isEmpty()) // <2>
                         return;
 
-                    context.byType(AccountService.class).save(account.getInstance(), new TideResponder<Void>() {
+                    context.byType(AccountService.class).save(account.getInstance(), new TideResponder<Void>() { // <3>
                         @Override
                         public void result(TideResultEvent<Void> event) {
-                            account.setInstance(null);
+                            account.setInstance(null); // <4>
                         }
 
                         @Override
                         public void fault(TideFaultEvent event) {
-                            System.out.println("Could not save account: " + event.getFault());
+                            System.out.println("Could not save account: " + event.getFault()); // <5>
                         }
                     });
                 }
             });
+            saveButton.disableProperty().bind(Bindings.not(account.dirtyProperty())); // <6>
 
             deleteButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
@@ -406,14 +400,17 @@ public class DataClient extends Application {
                     });
                 }
             });
+            deleteButton.visibleProperty().bind(account.savedProperty()); // <7>
+            deleteButton.managedProperty().bind(account.savedProperty());
 
             cancelButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
-                public void handle(ActionEvent actionEvent) {
+                public void handle(ActionEvent actionEvent) { // <8>
                     account.reset();
                     account.setInstance(null);
                 }
             });
+            // end::form-ui[]
         }
     }
 }

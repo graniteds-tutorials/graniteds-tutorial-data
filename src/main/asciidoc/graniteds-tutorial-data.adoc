@@ -60,14 +60,11 @@ endif::[]
 mvn jboss-as:run -Djboss-as.version=7.2.0.Final
 ----
 
-NOTE
-----
-JBoss AS 7.1 has bugs or limitations which prevent the tutorial from working out of the box, thus using JBoss AS 7.2 is required.
+NOTE: JBoss AS 7.1 has some limitations which prevent the example from working out of the box, thus using JBoss AS 7.2 is required.
 However JBoss AS 7.2 is not directly available from Maven Central, so you first have to download it from
 http://www.jboss.org/jbossas/downloads/[here] (it's named JBoss EAP 6.1.0.Final) and install it in your local Maven repository with:
 ----
 mvn install:install-file -DgroupId=org.jboss.as -DartifactId=jboss-as-dist -Dversion=7.2.0.Final -Dpackaging=zip -Dfile=/path/to/jboss
-----
 ----
 
 .GlassFish 3.1.2.2
@@ -79,41 +76,6 @@ mvn embedded-glassfish:run
 ----
 mvn tomee:run
 ----
-
-ifeval::["{client}" == "java"]
-To launch the client, open a new console in the +client-java+ folder and launch the application jar file:
-
-----
-cd client-java
-
-java -jar target/data.jar
-----
-
-This client is not interactive and continuously publishes messages to the chat room.
-You should see some logs and the following output:
-----
-------------------
-AAPL: $113.94
-GOOG: $101.47
-MSFT: $53.05
-AMZN: $101.47
-------------------
-AAPL: $114.40
-GOOG: $101.43
-MSFT: $52.92
-AMZN: $101.02
-------------------
-AAPL: $114.36
-GOOG: $101.90
-MSFT: $52.97
-AMZN: $100.55
-------------------
-AAPL: $113.94
-GOOG: $101.70
-MSFT: $52.55
-AMZN: $100.97...
-----
-endif::[]
 
 ifeval::["{client}" == "javafx"]
 Before launching the JavaFX client, it is first necessary to build a proper executable jar with the http://zenjava.com/javafx/maven/[Zenjava JavaFX plugin]:
@@ -138,8 +100,8 @@ endif::[]
 NOTE: To run the tutorial for another combination of client and server technologies, redo everything from the start
 with the corresponding +client+ and +server+ arguments, so you get the correct tutorial document.
 
-As this is a server-to-client messaging application, you can of course start multiple clients at once and check that
-messages are received by all of them.
+As this application implements server-to-client data push, you can of course start multiple clients at once and check that
+updates are propagated to all of them.
 
 Now let's have a look at the various interesting code and configuration elements of the server and the client
 applications.

@@ -20,7 +20,7 @@ public class AccountServiceImpl implements AccountService {
     private EntityManager entityManager;
 
     public void save(Account account) {
-        entityManager.merge(account);
+        entityManager.merge(account); // <1>
     }
 
     public void remove(Account account) {
@@ -29,7 +29,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Transactional(readOnly=true)
-    public Page<Account> findByFilter(Map<String, String> filter, PageInfo pageInfo) {
+    public Page<Account> findByFilter(Map<String, String> filter, PageInfo pageInfo) { // <2>
         return new AccountSearch(entityManager).findByFilter(filter, pageInfo);
     }
 }

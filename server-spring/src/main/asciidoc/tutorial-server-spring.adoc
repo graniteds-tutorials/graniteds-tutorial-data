@@ -2,6 +2,7 @@
 :icons: font
 :rootdir: ../../../..
 :srcdir: {rootdir}/server-spring/src
+:modelsrcdir: {rootdir}/server-model/src
 
 The server application is a Spring service which implements basic CRUD operations on user accounts in an in-memory HSQL database.
 The updates on the persistent entities are dispatched to other clients though a messaging destination.
@@ -57,16 +58,16 @@ Next we have to declare the data messaging destination (see the <<client.destina
 client object is created):
 
 [[server.destination]]
-[source,java,indent=0]
 .main/resources/application-context.xml
+[source,java,indent=0]
 ----
 include::{srcdir}/main/resources/application-context.xml[tags=messaging-destination]
 ----
 
 The data model is a standard JPA entity with a few particularities:
 
-[source,java,indent=0]
 .main/java/org/graniteds/tutorial/data/entities/Account.java
+[source,java,indent=0]
 ----
 include::{modelsrcdir}/main/java/org/graniteds/tutorial/data/entities/Account.java[tags=entity]
 ----
@@ -85,8 +86,8 @@ with the entity and will be evaluated on the server during serialization.
 
 The service is a simple Spring bean which implements the following interface:
 
-[source,java,indent=0]
 .main/java/org/graniteds/tutorial/data/services/AccountService.java
+[source,java,indent=0]
 ----
 include::{modelsrcdir}/main/java/org/graniteds/tutorial/data/services/AccountService.java[tags=service]
 ----
