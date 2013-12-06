@@ -1,7 +1,7 @@
-= GraniteDS data Tutorial
+= GraniteDS Data Tutorial
 
-This tutorial shows how to build a simple server data application where the clients receive random stock prices
-using a GraniteDS long polling channel.
+This tutorial shows how to build a simple data application that manages a database of user accounts. All connected clients are
+notified and synchronized with data updates using a GraniteDS long polling channel.
 
 == How to use this tutorial
 
@@ -38,7 +38,6 @@ The available options for the server are:
 
 The available options for the client are:
 
-* java
 * javafx
 * flex
 * air

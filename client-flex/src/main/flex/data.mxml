@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- tag::state-ui[] -->
+<s:Application
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:mx="library://ns.adobe.com/flex/mx"
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        width="360" height="400"
+        currentState="{account ? 'editState' : 'listState'}"
+        preinitialize="init()">
+    <!-- end::state-ui[] -->
+
+    <s:states>
+        <s:State name="listState"/>
+        <s:State name="editState"/>
+    </s:states>
+
+    <s:transitions>
+        <s:Transition fromState="listState" toState="editState">
+            <s:Parallel duration="250" effectStart="editView.visible = true">
+                <s:Move target="{editView}" xFrom="{mainView.width}" xTo="0"/>
+                <mx:Blur target="{listView}"/>
+            </s:Parallel>
+        </s:Transition>
+        <s:Transition fromState="editState" toState="listState">
+            <s:Parallel duration="250" effectEnd="editView.visible = false">
+                <s:Move target="{editView}" xFrom="0" xTo="500"/>
+            </s:Parallel>
+        </s:Transition>
+    </s:transitions>
+
+    <fx:Style>
+        @namespace s "library://ns.adobe.com/flex/spark";
+
+        @font-face {
+            src: url("../resources/assets/fontawesome-webfont.ttf");
+            fontFamily: FontAwesome;
+        }
+
+        s|Button {
+            chromeColor: #97b54b;
+            color: white;
+        }
+    </fx:Style>
+
+    <fx:Script>
+        <![CDATA[
+        import mx.data.utils.Managed;
+
+        import org.granite.tide.collections.PagedQuery;
+        import org.granite.tide.data.DataObserver;
+        import org.granite.tide.service.SimpleServerApp;
+        import org.granite.tide.spring.Context;
+        import org.granite.tide.spring.Spring;
+        import org.granite.validation.ValidatorFactory;
+        import org.graniteds.tutorial.data.entities.Account;
+        import org.graniteds.tutorial.data.services.AccountService;
+
+        [Bindable]
+        public var accountsQuery:PagedQuery;
+
+        public var accountService:AccountService;
+
+        private function init():void {
+            // tag::client-setup[]
+            Spring.getInstance().initApplication(); // <1>
+            // end::client-setup[]
+
+            // tag::list-setup[]
+            Spring.getInstance().addComponentWithFactory("accountsQuery", PagedQuery,
+                    { maxResults: 40, methodName: "findByFilter", remoteComponentClass: AccountService }
+            );
+            // end::list-setup[]
+
+            var context:Context = Spring.getInstance().getSpringContext();
+
+            accountsQuery = context.accountsQuery;
+            accountService = context.byType(AccountService) as AccountService;
+
+            // tag::data-setup[]
+            Spring.getInstance().addComponent("dataTopic", DataObserver);
+
+            context.dataTopic.subscribe();
+            // end::data-setup[]
+        }
+
+        // tag::form-actions[]
+        [Bindable] [Out]
+        public var account:Account; // <1>
+
+        private function create():void {
+            account = new Account(); // <2>
+        }
+
+        private function save():void {
+            if (ValidatorFactory.getInstance().validate(account).length > 0) // <3>
+                return;
+            accountService.save(account, closeEditor); // <4>
+        }
+
+        private function remove():void {
+            accountService.remove(account, closeEditor);
+        }
+
+        private function cancel():void {
+            Managed.resetEntity(account); // <5>
+            closeEditor();
+        }
+
+        private function closeEditor(event:Event = null):void {
+            account = null;
+            accountsList.selectedItem = null;
+        }
+        // end::form-actions[]
+        ]]>
+    </fx:Script>
+
+    <s:VGroup width="100%" height="100%" gap="10" paddingBottom="10" paddingTop="10" paddingLeft="10" paddingRight="10">
+        <s:Label text="Account Manager Example" fontSize="24" fontFamily="Tahoma" width="100%" height="50" verticalAlign="middle"
+                 backgroundColor="#97b54b" color="white" paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5"/>
+
+        <s:Group id="mainView" width="100%" height="100%">
+            <s:VGroup id="listView" width="100%" height="100%" gap="10" enabled="{!account}">
+                <!-- tag::list-ui[] -->
+                <s:HGroup width="100%" gap="5">
+                    <s:TextInput id="searchText" height="25" width="100%" text="@{accountsQuery.filter.searchText}"
+                                 change="accountsQuery.refresh()"/> <!--1-->
+                    <s:Button id="searchButton" label="\uf002" fontFamily="FontAwesome" width="40" height="25"
+                              click="accountsQuery.refresh()"/> <!--2-->
+                </s:HGroup>
+
+                <s:List id="accountsList" width="100%" height="100%" borderColor="#97b54b"
+                        dataProvider="{accountsQuery}"
+                        itemRenderer="AccountItemRenderer"
+                        change="account = accountsList.selectedItem"/> <!--3-->
+                <!-- end::list-ui[] -->
+
+                <s:Button label="New" click="create()"/>
+            </s:VGroup>
+
+            <s:BorderContainer id="editView" width="100%" height="100%" backgroundColor="white" borderColor="#97b54b"
+                               visible="false">
+                <s:layout>
+                    <s:VerticalLayout gap="10" paddingTop="10" paddingBottom="10" paddingLeft="10" paddingRight="10"/>
+                </s:layout>
+
+                <!-- tag::form-ui[] -->
+                <s:Label fontFamily="Arial" fontSize="16"
+                         text="{isNaN(account.version) ? 'Create account' : 'Edit account'}"/> <!--1-->
+
+                <s:VGroup width="100%">
+                    <s:Label text="Name"/>
+                    <s:TextInput text="@{account.name}" width="100%"/>
+                </s:VGroup>
+
+                <s:VGroup width="100%">
+                    <s:Label text="E-mail"/>
+                    <s:TextInput text="@{account.email}" width="100%"/>
+                </s:VGroup>
+
+                <s:HGroup gap="10">
+                    <s:Button label="Save" click="save()" enabled="{account.meta_dirty}"/> <!--2-->
+                    <s:Button label="Delete" visible="{!isNaN(account.version)}" includeInLayout="{!isNaN(account.version)}"
+                              click="remove()"/>  <!--3-->
+                    <s:Button label="Cancel" click="cancel()"/>
+                </s:HGroup>
+                <!-- end::form-ui[] -->
+            </s:BorderContainer>
+        </s:Group>
+    </s:VGroup>
+</s:Application>

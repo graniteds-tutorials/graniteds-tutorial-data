@@ -1,0 +1,120 @@
+== The Flex client application
+:icons: font
+:rootdir: ../../../..
+:srcdir: {rootdir}/client-air/src
+
+The client application is a Flex application which displays a list of user accounts and allow to create and edit them.
+The application is subscribed to a data topic and received updates made by other clients in real-time though a GDS
+messaging channel.
+It's a single MXML which consists in 3 parts:
+
+. Bootstrap the GraniteDS container and configure the client components
+. Define the Flex UI
+. Define the handlers for user actions
+
+Here is the source code for the first bootstrap/configuration part:
+
+[[client.destination]]
+[source,actionscript,indent=0]
+.main/flex/data.mxml
+----
+include::{srcdir}/main/flex/data.mxml[tags=client-setup]
+----
+
+=== The list view
+
+The first part of the application is the list view. Here we'll be using the +PagedQuery+ component which can
+query a remote service to get data and handle paging and sorting. It's declared in the context at the beginning of the
+application:
+[source,actionscript,indent=0]
+----
+include::{srcdir}/main/flex/data.mxml[tags=list-setup]
+----
+
+And then attached to a Spark +List+:
+[source,xml,indent=0]
+----
+include::{srcdir}/main/flex/data.mxml[tags=list-ui]
+----
+<1> We bind the text of the search box to the property +searchText+ of the query filter object. This filter object
+(here a simple +Map+) will be transmitted to the server to build the actual query.
+<2> The actions on the __Enter__ key and the search button simply call +refresh()+ on the +PagedQuery+ so it calls
+the server to apply the requested search text.
+<3> The +PagedQuery+ is set as the data provider for the +List+. The selection of an item of the list triggers the
+display of the edit form.
+
+=== The editor form
+
+The next part is the editor form. We use Flex states bound to the +account+ property to trigger which view is
+displayed at any moment. The form is displayed whenever an account is set and hidden when account is cleared.
+
+[source,xml,indent=0]
+----
+include::{srcdir}/main/flex/data.mxml[tags=state-ui]
+----
+
+The form itself is quite simple and uses bidirectional data binding between the edited entity instance and the UI controls.
+
+[source,xml,indent=0]
+----
+include::{srcdir}/main/flex/data.mxml[tags=form-ui]
+----
+<1> We bind the form title to the property +version+ of the edited account so new and persisted accounts have a different
+label (__Create__ or __Edit__).
+<2> We use the property +meta_dirty+ to enable the __Save__ button only when the user has changed something.
+<3> Same as 1, we use the +version+ property to trigger the visibity of the __Delete__ button only for persisted entity.
+
+The button actions are quite simple:
+[source,actionscript,indent=0]
+----
+include::{srcdir}/main/flex/data.mxml[tags=form-actions]
+----
+<1> We define the +account+ property which hold the current edited entity. Note the annotation +[Out]+ to force the
+property value to be managed in the Tide context (+[Out]+ defines a binding between +account+ and +context.account+). This
+is useful in particular for new instances which are otherwise unknown from the framework.
+<2> The __New__ button simply creates a new +Account+ object.
+<3> The action handler for the __Save__ button first validates the instance with the Bean Validation API.
+<4> Then it calls the method +save()+ of the remote service by using the client proxy +AccountService+ which has been generated during
+the build.The success handler reset the managed instance to +null+. This consequently makes the form disappear due to the
+binding on the +currentState+ on the main MXML.
+<5> The __Cancel__ button does not have to access the server. We simply reset the instance to its initial state in case
+the user has changed something, otherwise due to data binding the object stored in memory and displayed in the application
+ would keep the user input and thus be inconsistent with what is persisted on the server.
+
+=== Real-time data push
+
+Setting up data push is quite easy, we just have to declare a +DataObserver+ object on the topic which has been defined
+on the server. This component will receive all updates from all clients and propagate them to the UI through data binding:
+
+----
+include::{srcdir}/main/flex/data.mxml[tags=data-setup]
+----
+
+The added and removed entities are transparently handled by the +PagedQuery+ which will refresh itself.
+
+=== Code generation
+
+[[client.generation]]
+The client model class and the service proxy are generated using Flexmojos.
+Here is the relevant part of the +pom.xml+:
+
+[source,xml,indent=0]
+.client-air/pom.xml
+----
+<plugins>
+    <plugin>
+include::https://raw.github.com/graniteds-tutorials/graniteds-tutorial/master/client-flex/pom.xml[tags=maven-generate]
+    ...
+    </plugin>
+</plugins>
+----
+
+If you have a look at the generated class, you can see the +[RemoteClass]+ annotation which makes the link between the client
+and server class names.
+
+Finally, here are the maven dependencies for the Flex module:
+[source,xml,indent=0]
+----
+include::https://raw.github.com/graniteds-tutorials/graniteds-tutorial/master/client-java-base/pom.xml[tags=maven-deps]
+include::https://raw.github.com/graniteds-tutorials/graniteds-tutorial/master/client-java-base/client-javafx/pom.xml[tags=maven-deps]
+----

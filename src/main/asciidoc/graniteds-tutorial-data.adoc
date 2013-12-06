@@ -2,7 +2,7 @@
 
 = GraniteDS Data Tutorial
 
-This tutorial shows how to build a simple data application that managed a database of user accounts. All connected clients are
+This tutorial shows how to build a simple data application that manages a database of user accounts. All connected clients are
 notified and synchronized with data updates using a GraniteDS long polling channel.
 
 If you are looking at this document in html format, you have likely already built the project.
