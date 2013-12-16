@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/data" />
+      <excludeFolder url="file://$MODULE_DIR$/target/docs" />
       <excludeFolder url="file://$MODULE_DIR$/target/jboss-as-run" />
       <excludeFolder url="file://$MODULE_DIR$/target/maven-archiver" />
       <excludeFolder url="file://$MODULE_DIR$/target/surefire" />

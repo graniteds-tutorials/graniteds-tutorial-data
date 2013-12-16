@@ -1,0 +1,133 @@
+== The JavaFX client application
+:icons: font
+:rootdir: ../../../..
+:srcdir: {rootdir}/client-javafx/src
+
+The client application is a JavaFX application which displays a list of user accounts and allow to create and edit them.
+The application is subscribed to a data topic and received updates made by other clients in real-time though a GDS
+messaging channel.
+It's a single main class which consists in 3 parts:
+
+. Bootstrap the GraniteDS container and configure the client components
+. Define the JavaFX UI
+. Define the handlers for user actions
+
+Here is the source code for the first bootstrap/configuration part:
+
+[source,java,indent=0]
+.main/java/org/graniteds/tutorial/data/client/DataClient.java
+----
+include::{srcdir}/main/java/org/graniteds/tutorial/data/client/DataClient.java[tags=client-init]
+----
+<1> Bootstrap the GraniteDS Tide context and store it in a static variable to we can use it from anywhere in the application.
+
+----
+include::{srcdir}/main/java/org/graniteds/tutorial/data/client/DataClient.java[tags=client-setup]
+----
+<2> Configure a +ServerSession+ object in the context with the server url and context path.
+<3> Configure the +ServerSession+ with the package name of the entities that will be serialized (see <<client.generation,
+client generation>> below).
+<4> Start the server session, initializing all required resources.
+
+=== The list view
+
+The first part of the application is the list view. Here we'll be using the paging +PagedQuery+ component which can
+query a remote service to get data and handle paging and sorting. It's declared in the context at the beginning of the
+application:
+----
+include::{srcdir}/main/java/org/graniteds/tutorial/data/client/DataClient.java[tags=list-setup]
+----
+
+And then attached to a JavaFX +ListView+:
+----
+include::{srcdir}/main/java/org/graniteds/tutorial/data/client/DataClient.java[tags=list-ui]
+----
+<1> We bind the text of the search box to the property +searchText+ of the query filter object. This filter object
+(here a simple +Map+) will be transmitted to the server to build the actual query.
+<2> The actions on the __Enter__ key and the search button simply call +refresh()+ on the +PagedQuery+ so it calls
+the server to apply the requested search text.
+<3> The +PagedQuery+ is set as the items provider for the +ListView+.
+<4> We use here a custom cell factory to define a (relatively) nice display with the gravatar image of the user, its
+name and e-mail. Note in the class +AccountCell+ how we use data binding extensively to link the data object and the
+UI controls. This ensures that all updates received from the server that are not directly made by the current user will
+be correctly propagated to the UI.
+
+=== The editor form
+
+The next part is the editor form. As the thing we are editing is an +Account+ object, we use the convenient component
++ManagedEntity+ which holds an entity instance and provides a few interesting properties that can be used with binding.
+
+----
+include::{srcdir}/main/java/org/graniteds/tutorial/data/client/DataClient.java[tags=form-setup]
+----
+
+----
+include::{srcdir}/main/java/org/graniteds/tutorial/data/client/DataClient.java[tags=form-bind]
+----
+<1> We bind the selected item of the list to the +instance+ property of the +ManagedEntity+.
+<2> We bind the __New__ button to an action which creates a new object +Account+ and sets it as instance of
+the +ManagedEntity+.
+<3> We listen to the +visible+ property of the form to disable input on the list and clear the selection when the form
+is displayed or hidden.
+
+----
+include::{srcdir}/main/java/org/graniteds/tutorial/data/client/DataClient.java[tags=form-ui]
+----
+<1> We set a listener to the +instance+ property of the +ManagedEntity+ so we can bind and unbind the form field to
+the edited object properties when the instance is changed. Note the use of +isSaved()+ to check if the entity is
+persistent or new.
+<2> The action handler for the __Save__ button first validates the instance with the Bean Validation API.
+<3> Then it calls the method +save()+ of the remote service by using the client proxy +AccountService+ which has been generated during
+the build.
+<4> The success handler reset the managed instance to +null+. This consequently makes the form disappear due to the
+listener we set in point 1.
+<5> The fault handler simply logs the received fault. We could also display an alert or something to the user.
+<6> We use the +dirty+ property of the +ManagedEntity+ to enable the button __Save__ only when the user has actually
+changed something.
+<7> The __Delete__ button action is similar to the one of __Save__. Not how we bind to the property +saved+ of the managed
+ entity to update the visibility of the button (new instances cannot be deleted).
+<8> The __Cancel__ button does not have to access the server. We simply reset the instance to its initial state in case
+the user has changed something, otherwise due to data binding the object stored in memory and displayed in the application
+ would keep the user input and thus be inconsistent with what is persisted on the server.
+
+=== Real-time data push
+
+[[client.destination]]
+Setting up data push is quite easy, we just have to declare a +DataObserver+ object on the topic which has been defined
+on the server. This component will receive all updates from all clients and propagate them to the UI through data binding:
+
+----
+include::{srcdir}/main/java/org/graniteds/tutorial/data/client/DataClient.java[tags=data-setup]
+----
+
+The added and removed entities are transparently handled by the +PagedQuery+ which will refresh itself.
+
+=== Code generation
+
+[[client.generation]]
+The client model class and the service proxy are generated using the GDS +ant+ task named +gfx+ (Generate JavaFX).
+Here is the relevant part of the +pom.xml+:
+
+[source,xml,indent=0]
+.client-javafx/pom.xml
+----
+<plugins>
+    <plugin>
+include::https://raw.github.com/graniteds-tutorials/graniteds-tutorial/master/client-javafx/pom.xml[tags=maven-generate]
+    ...
+    </plugin>
+</plugins>
+----
+
+If you have a look at the generated class, you can see the +@RemoteAlias+ annotation which makes the link between the client
+and server class names. You can also notice that the client entity does not depend on JPA at all and fully respects
+JavaFX idioms (bindable properties and so on). This also makes the client application totally independent of the server,
+and you can actually check that the exact same client can connect to either JBoss/Hibernate, GlassFish/EclipseLink or
+TomEE/OpenJPA.
+
+Finally, here are the maven dependencies for the JavaFX module:
+[source,xml,indent=0]
+----
+include::https://raw.github.com/graniteds-tutorials/graniteds-tutorial/master/client-java-base/pom.xml[tags=maven-deps]
+include::https://raw.github.com/graniteds-tutorials/graniteds-tutorial/master/client-java-base/client-javafx/pom.xml[tags=maven-deps]
+----

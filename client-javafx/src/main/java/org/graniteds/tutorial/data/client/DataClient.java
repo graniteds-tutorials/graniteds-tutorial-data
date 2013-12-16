@@ -19,7 +19,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import org.granite.client.javafx.tide.JavaFXApplication;
@@ -29,6 +28,9 @@ import org.granite.client.tide.Context;
 import org.granite.client.tide.data.DataObserver;
 import org.granite.client.tide.impl.SimpleContextManager;
 import org.granite.client.tide.server.ServerSession;
+import org.granite.client.tide.server.TideFaultEvent;
+import org.granite.client.tide.server.TideResponder;
+import org.granite.client.tide.server.TideResultEvent;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -177,25 +179,20 @@ public class DataClient extends Application {
         stackPane.getChildren().add(accountForm);
 
         Scene scene = new Scene(vbox, 360, 400);
-        stage.setTitle("GraniteDS Data Tutorial");
+        stage.setTitle("GraniteDS Data Tutorial - JavaFX");
         stage.setScene(scene);
         stage.show();
-
-        // tag::client-close[]
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                try {
-                    dataObserver.stop();
-                    serverSession.stop();
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        // end::client-close[]
     }
+
+    // tag::client-close[]
+    @Override
+    public void stop() throws Exception {
+        context.byType(DataObserver.class).stop();
+        context.byType(ServerSession.class).stop();
+
+        super.stop();
+    }
+    // end::client-close[]
 
 
     private class AccountCell extends ListCell<Account> {
@@ -328,6 +325,7 @@ public class DataClient extends Application {
 
             // tag::form-ui[]
             account.instanceProperty().addListener(new ChangeListener<Account>() {
+
                 @Override
                 public void changed(ObservableValue<? extends Account> instance, final Account oldValue, final Account newValue) { // <1>
                     if (newValue != null) {
@@ -346,14 +344,14 @@ public class DataClient extends Application {
                         showTransition.play();
                     }
                     else {
+                        nameField.textProperty().unbindBidirectional(oldValue.nameProperty());
+                        emailField.textProperty().unbindBidirectional(oldValue.emailProperty());
+
                         hideTransition.onFinishedProperty().set(new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent actionEvent) {
                                 setVisible(false);
                                 setManaged(false);
-
-                                nameField.textProperty().unbindBidirectional(oldValue.nameProperty());
-                                emailField.textProperty().unbindBidirectional(oldValue.emailProperty());
                             }
                         });
 

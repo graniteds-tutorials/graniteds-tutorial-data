@@ -24,7 +24,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public void remove(Account account) {
-        entityManager.refresh(account);
+        account = entityManager.find(Account.class, account.getId());
         entityManager.remove(account);
     }
 
