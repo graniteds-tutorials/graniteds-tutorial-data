@@ -59,25 +59,25 @@
         <dependency>
             <groupId>org.graniteds</groupId>
             <artifactId>granite-server</artifactId>
-            <version>3.0.0.SNAPSHOT</version>
+            <version>${graniteds.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.graniteds</groupId>
             <artifactId>granite-server-hibernate4</artifactId>
-            <version>3.0.0.SNAPSHOT</version>
+            <version>${graniteds.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.graniteds</groupId>
             <artifactId>granite-server-eclipselink</artifactId>
-            <version>3.0.0.SNAPSHOT</version>
+            <version>${graniteds.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.graniteds</groupId>
             <artifactId>granite-server-openjpa</artifactId>
-            <version>3.0.0.SNAPSHOT</version>
+            <version>${graniteds.version}</version>
         </dependency>
 
         <dependency>
