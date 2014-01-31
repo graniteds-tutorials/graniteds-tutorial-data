@@ -25,6 +25,7 @@
         <module name="client-flex" />
         <module name="client-java" />
         <module name="client-javafx" />
+        <module name="client-javafx-di" />
         <module name="server-cdi" />
         <module name="server-ejb" />
         <module name="server-model" />
@@ -36,7 +37,8 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="client-java" target="1.6" />
-      <module name="client-javafx" target="1.6" />
+      <module name="client-javafx" target="1.7" />
+      <module name="client-javafx-di" target="1.7" />
       <module name="server-cdi" target="1.6" />
       <module name="server-ejb" target="1.6" />
       <module name="server-spring" target="1.6" />

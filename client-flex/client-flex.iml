@@ -11,12 +11,6 @@
             <entry library-name="Maven: com.adobe.flexunit:flexunit:swc:4.0-rc-1" library-level="project">
               <dependency linkage="Test" />
             </entry>
-            <entry library-name="Maven: org.graniteds:granite-client-flex:swc:3.0.0.SNAPSHOT" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
-            <entry library-name="Maven: org.graniteds:granite-client-flex45-advanced:swc:3.0.0.SNAPSHOT" library-level="project">
-              <dependency linkage="Merged" />
-            </entry>
             <entry library-name="Maven: com.adobe.flex.framework:advancedgrids:swc:4.5.1.21328" library-level="project">
               <dependency linkage="Merged" />
             </entry>
@@ -113,6 +107,12 @@
             <entry library-name="Maven: com.adobe.flex.framework:airspark:rb.swc:4.5.1.21328" library-level="project">
               <dependency linkage="Merged" />
             </entry>
+            <entry library-name="Maven: org.graniteds:granite-client-flex:swc:3.0.2.GA" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
+            <entry library-name="Maven: org.graniteds:granite-client-flex45-advanced:swc:3.0.2.GA" library-level="project">
+              <dependency linkage="Merged" />
+            </entry>
           </entries>
           <sdk name="Flexmojos SDK 4.5.1.21328" />
         </dependencies>
@@ -144,8 +144,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:spark:swc:4.5.1.21328" level="project" />
     <orderEntry type="library" exported="" name="Maven: com.adobe.flexunit:flexunit:swc:4.0-rc-1" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.graniteds:granite-client-flex:swc:3.0.0.SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.graniteds:granite-client-flex45-advanced:swc:3.0.0.SNAPSHOT" level="project" />
     <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:advancedgrids:swc:4.5.1.21328" level="project" />
     <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:authoringsupport:swc:4.5.1.21328" level="project" />
     <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:charts:swc:4.5.1.21328" level="project" />
@@ -178,6 +176,8 @@
     <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:servicemonitor:swc:4.5.1.21328" level="project" />
     <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:airframework:rb.swc:4.5.1.21328" level="project" />
     <orderEntry type="library" exported="" name="Maven: com.adobe.flex.framework:airspark:rb.swc:4.5.1.21328" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.graniteds:granite-client-flex:swc:3.0.2.GA" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.graniteds:granite-client-flex45-advanced:swc:3.0.2.GA" level="project" />
   </component>
 </module>
 

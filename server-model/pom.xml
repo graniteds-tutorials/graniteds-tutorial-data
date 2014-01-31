@@ -28,7 +28,7 @@
     <parent>
         <groupId>org.graniteds.tutorials</groupId>
         <artifactId>tutorial-parent</artifactId>
-        <version>3.0.1.GA</version>
+        <version>3.0.2.GA</version>
     </parent>
 
     <artifactId>tutorial-data-server-model</artifactId>
@@ -87,5 +87,18 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -12,10 +12,10 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.validation:validation-api:1.0.0.GA" level="project" />
-    <orderEntry type="library" name="Maven: org.graniteds:granite-server:3.0.0.SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.graniteds:granite-server-hibernate4:3.0.0.SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.graniteds:granite-server-eclipselink:3.0.0.SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.graniteds:granite-server-openjpa:3.0.0.SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.graniteds:granite-server:3.0.2.GA" level="project" />
+    <orderEntry type="library" name="Maven: org.graniteds:granite-server-hibernate4:3.0.2.GA" level="project" />
+    <orderEntry type="library" name="Maven: org.graniteds:granite-server-eclipselink:3.0.2.GA" level="project" />
+    <orderEntry type="library" name="Maven: org.graniteds:granite-server-openjpa:3.0.2.GA" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.hsqldb:hsqldb:2.3.1" level="project" />
   </component>
 </module>

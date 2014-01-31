@@ -14,6 +14,8 @@
         <option value="$PROJECT_DIR$/server-spring/pom.xml" />
         <option value="$PROJECT_DIR$/server-ejb/pom.xml" />
         <option value="$PROJECT_DIR$/client-air/pom.xml" />
+        <option value="$PROJECT_DIR$/client-javafx-spring/pom.xml" />
+        <option value="$PROJECT_DIR$/client-javafx-di/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

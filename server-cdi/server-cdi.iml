@@ -11,6 +11,7 @@
       <excludeFolder url="file://$MODULE_DIR$/target/data" />
       <excludeFolder url="file://$MODULE_DIR$/target/docs" />
       <excludeFolder url="file://$MODULE_DIR$/target/jboss-as-run" />
+      <excludeFolder url="file://$MODULE_DIR$/target/m2e-wtp" />
       <excludeFolder url="file://$MODULE_DIR$/target/maven-archiver" />
       <excludeFolder url="file://$MODULE_DIR$/target/surefire" />
     </content>
@@ -19,16 +20,16 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.ejb:jboss-ejb-api_3.1_spec:1.0.2.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final" level="project" />
     <orderEntry type="module" module-name="server-model" />
-    <orderEntry type="library" name="Maven: org.graniteds:granite-server:3.0.0.SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.graniteds:granite-server-hibernate4:3.0.0.SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.graniteds:granite-server-eclipselink:3.0.0.SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.graniteds:granite-server-openjpa:3.0.0.SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.graniteds:granite-server:3.0.2.GA" level="project" />
+    <orderEntry type="library" name="Maven: org.graniteds:granite-server-hibernate4:3.0.2.GA" level="project" />
+    <orderEntry type="library" name="Maven: org.graniteds:granite-server-eclipselink:3.0.2.GA" level="project" />
+    <orderEntry type="library" name="Maven: org.graniteds:granite-server-openjpa:3.0.2.GA" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.hsqldb:hsqldb:2.3.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.enterprise:cdi-api:1.0-SP4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.1_spec:1.0.0.Beta1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.annotation:jsr250-api:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.inject:javax.inject:1" level="project" />
-    <orderEntry type="library" name="Maven: org.graniteds:granite-server-cdi:3.0.0.SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.graniteds:granite-server-cdi:3.0.2.GA" level="project" />
   </component>
 </module>
 

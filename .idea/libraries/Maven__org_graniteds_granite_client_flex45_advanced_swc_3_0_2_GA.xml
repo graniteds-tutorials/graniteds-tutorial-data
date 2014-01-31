@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Maven: org.graniteds:granite-client-flex45-advanced:swc:3.0.2.GA" type="flex">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/graniteds/granite-client-flex45-advanced/3.0.2.GA/granite-client-flex45-advanced-3.0.2.GA.swc!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/graniteds/granite-client-flex45-advanced/3.0.2.GA/granite-client-flex45-advanced-3.0.2.GA-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

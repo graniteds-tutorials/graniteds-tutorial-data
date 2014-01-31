@@ -56,6 +56,9 @@
             import org.graniteds.tutorial.data.entities.Account;
             import org.graniteds.tutorial.data.services.AccountService;
 
+            import spark.collections.Sort;
+            import spark.collections.SortField;
+
             [Bindable]
             public var accountsQuery:PagedQuery;
 
@@ -71,7 +74,7 @@
 
                 // tag::list-setup[]
                 Spring.getInstance().addComponentWithFactory("accountsQuery", PagedQuery,
-                        { maxResults: 40, methodName: "findByFilter", remoteComponentClass: AccountService }
+                        { maxResults: 40, methodName: "findByFilter", remoteComponentClass: AccountService, elementClass: Account }
                 );
                 // end::list-setup[]
 
