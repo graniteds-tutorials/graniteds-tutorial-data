@@ -2,13 +2,14 @@ package org.graniteds.tutorial.data.app;
 
 import org.granite.config.servlet3.ServerFilter;
 import org.granite.gravity.config.servlet3.MessagingDestination;
+import org.granite.messaging.service.annotations.RemoteDestination;
 import org.granite.tide.ejb.EjbConfigProvider;
 
-// tag::app-filter[]
+// tag::server-filter[]
 @ServerFilter(configProviderClass=EjbConfigProvider.class) // <1>
 public class DataApplication {
 
     @MessagingDestination(noLocal=true, sessionSelector=true)
     public String dataTopic; // <2>
 }
-// end::app-filter[]
+// end::server-filter[]
