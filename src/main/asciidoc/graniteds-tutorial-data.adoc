@@ -1,3 +1,4 @@
+:icons: font
 :rootdir: ../../..
 
 = GraniteDS Data Tutorial

@@ -1,5 +1,4 @@
 == The Flex client application
-:icons: font
 :rootdir: ../../../..
 :srcdir: {rootdir}/client-air/src
 
@@ -30,6 +29,17 @@ application:
 ----
 include::{srcdir}/main/flex/data.mxml[tags=list-setup]
 ----
+
+ifeval::["{server}" == "ejb"]
+[NOTE]
+====
+EJB integration does not support lookup by type so it's necessary to force the EJB name on the client proxy:
+[source,actionscript,indent=0]
+----
+include::{srcdir}/main/flex/data.mxml[tags=service-setup]
+----
+====
+endif::[]
 
 And then attached to a Spark +List+:
 [source,xml,indent=0]

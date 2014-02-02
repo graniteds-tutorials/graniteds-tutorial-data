@@ -68,7 +68,9 @@
             Spring.getInstance().initApplication(); // <1>
             // end::client-setup[]
 
+			// tag::service-setup[]
             Spring.getInstance().addComponent("accountService", AccountService);
+            // end::service-setup[]
 			
             // tag::list-setup[]
             Spring.getInstance().addComponentWithFactory("accountsQuery", PagedQuery,

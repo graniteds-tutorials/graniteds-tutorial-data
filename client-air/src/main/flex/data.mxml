@@ -72,7 +72,9 @@
                         new SimpleServerApp("/data", false, "localhost", "8080"); // <2>
                 // end::client-setup[]
                 
-                Spring.getInstance().addComponent("accountService", AccountService);
+				// tag::service-setup[]
+	            Spring.getInstance().addComponent("accountService", AccountService);
+	            // end::service-setup[]
 
                 // tag::list-setup[]
                 Spring.getInstance().addComponentWithFactory("accountsQuery", PagedQuery,
