@@ -68,6 +68,8 @@
             Spring.getInstance().initApplication(); // <1>
             // end::client-setup[]
 
+            Spring.getInstance().addComponent("accountService", AccountService);
+			
             // tag::list-setup[]
             Spring.getInstance().addComponentWithFactory("accountsQuery", PagedQuery,
                     { maxResults: 40, methodName: "findByFilter", remoteComponentClass: AccountService, elementClass: Account }

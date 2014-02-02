@@ -71,6 +71,8 @@
                 Spring.getInstance().mainServerSession.serverApp =
                         new SimpleServerApp("/data", false, "localhost", "8080"); // <2>
                 // end::client-setup[]
+                
+                Spring.getInstance().addComponent("accountService", AccountService);
 
                 // tag::list-setup[]
                 Spring.getInstance().addComponentWithFactory("accountsQuery", PagedQuery,
@@ -81,7 +83,7 @@
                 var context:Context = Spring.getInstance().getSpringContext();
 
                 accountsQuery = context.accountsQuery;
-                accountService = context.byType(AccountService) as AccountService;
+            	accountService = context.byType(AccountService) as AccountService;
 
                 // tag::data-setup[]
                 Spring.getInstance().addComponent("dataTopic", DataObserver);
