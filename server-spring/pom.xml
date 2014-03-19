@@ -28,7 +28,7 @@
     <parent>
         <groupId>org.graniteds.tutorials</groupId>
         <artifactId>tutorial-parent-server-spring</artifactId>
-        <version>3.0.2.GA</version>
+        <version>3.0.3.GA</version>
     </parent>
   
     <artifactId>tutorial-data-server-spring</artifactId>
@@ -53,7 +53,7 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>4.2.7.SP1</version>
         </dependency>
-
+        
         <dependency>
             <groupId>org.graniteds.tutorials</groupId>
             <artifactId>tutorial-data-server-model</artifactId>
