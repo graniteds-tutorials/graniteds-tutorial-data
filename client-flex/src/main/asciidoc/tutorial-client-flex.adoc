@@ -1,4 +1,5 @@
 == The Flex client application
+:icons: font
 :rootdir: ../../../..
 :srcdir: {rootdir}/client-air/src
 

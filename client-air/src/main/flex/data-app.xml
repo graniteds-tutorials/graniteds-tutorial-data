@@ -4,7 +4,7 @@
     <id>org.graniteds.tutorial.data</id>
     <filename>data</filename>
     <name>GraniteDS Data Tutorial</name>
-    <versionNumber>1.0.0</versionNumber>
+    <versionNumber>3.1.0</versionNumber>
 	
     <initialWindow>
         <title>GraniteDS Data Tutorial</title>

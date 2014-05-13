@@ -66,6 +66,8 @@
         private function init():void {
             // tag::client-setup[]
             Spring.getInstance().initApplication(); // <1>
+            
+            Spring.getInstance().mainServerSession.serverApp = new SimpleServerApp();
             // end::client-setup[]
 
 			// tag::service-setup[]
@@ -81,6 +83,7 @@
             var context:Context = Spring.getInstance().getSpringContext();
 
             accountsQuery = context.accountsQuery;
+			accountsQuery.sort = new Sort();
             accountService = context.byType(AccountService) as AccountService;
 
             // tag::data-setup[]

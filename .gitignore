@@ -8,4 +8,6 @@ build/
 */.settings/gradle/
 */.settings/org.eclipse.wst*
 */.settings/.jsdt*
+*/.settings/*
+*.log
 *.versionsBackup
