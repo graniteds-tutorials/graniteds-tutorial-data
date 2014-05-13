@@ -66,6 +66,7 @@
         private function init():void {
             // tag::client-setup[]
             Spring.getInstance().initApplication(); // <1>
+            Spring.getInstance().mainServerSession.serverApp = new SimpleServerApp();
             // end::client-setup[]
 
 			// tag::service-setup[]

@@ -28,11 +28,11 @@
     <parent>
         <groupId>org.graniteds.tutorials</groupId>
         <artifactId>tutorial-parent-server-spring</artifactId>
-        <version>3.0.3.GA</version>
+        <version>3.0.4.GA</version>
     </parent>
   
     <artifactId>tutorial-data-server-spring</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>3.0.4.GA</version>
     <packaging>war</packaging>
     <name>GraniteDS Data Tutorial - Spring Server</name>
 	
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>org.graniteds.tutorials</groupId>
             <artifactId>tutorial-data-server-model</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>3.0.4.GA</version>
         </dependency>
     </dependencies>
 

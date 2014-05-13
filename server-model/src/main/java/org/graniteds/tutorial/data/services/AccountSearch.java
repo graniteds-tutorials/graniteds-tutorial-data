@@ -70,7 +70,7 @@ public class AccountSearch {
             .setMaxResults(pageInfo.getMaxResults())
             .getResultList();
 
-        return new Page<Account>(pageInfo.getFirstResult(), pageInfo.getMaxResults(), (int)resultCount, resultList);
+        return new Page<Account>(pageInfo.getFirstResult(), pageInfo.getMaxResults(), (int)resultCount, new ArrayList<Account>(resultList));
     }
     // end::findByFilter[]
 

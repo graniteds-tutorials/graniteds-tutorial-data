@@ -60,6 +60,8 @@ public class DataClient extends Application {
         // end::client-setup[]
 
         // tag::list-setup[]
+        final AccountService accountService = context.set("accountService", new AccountService(serverSession));
+        
         final PagedQuery<Account, Map<String, String>> accountsQuery = context.set(new PagedQuery<Account, Map<String, String>>(serverSession));
         accountsQuery.setMaxResults(40);
         accountsQuery.setMethodName("findByFilter");
