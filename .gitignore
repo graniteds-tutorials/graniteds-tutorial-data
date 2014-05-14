@@ -9,5 +9,7 @@ build/
 */.settings/org.eclipse.wst*
 */.settings/.jsdt*
 */.settings/org.hibernate*
+*/.settings/*
+*.log
 *.versionsBackup
 *.log
