@@ -12,7 +12,9 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 import org.granite.client.javafx.tide.ManagedEntity;
-import org.granite.client.tide.server.TideResponders;
+import org.granite.client.tide.server.TideFaultEvent;
+import org.granite.client.tide.server.TideResponder;
+import org.granite.client.tide.server.TideResultEvent;
 
 
 @Named
@@ -26,21 +28,36 @@ public class AccountController extends ManagedEntity<Account> {
 		this.accountService = accountService;
 	}
 	
-	
+	// tag::entity-save[]
 	public void save() {
-        if (!validator.validate(getInstance()).isEmpty()) // <2>
+        if (!validator.validate(getInstance()).isEmpty()) // <1>
             return;
 
-        accountService.save(getInstance(), TideResponders.of(
-            tre -> setInstance(null),
-            tfe -> System.out.println("Could not save account: " + tfe.getFault())
-        ));
+        accountService.save(getInstance(), new TideResponder<Void>() { // <2>
+			@Override
+			public void result(TideResultEvent<Void> tre) { // <3>
+				setInstance(null);
+			}
+			
+			@Override
+			public void fault(TideFaultEvent tfe) { // <4>
+				System.out.println("Could not save account: " + tfe.getFault()); 
+			}        	
+        });
 	}
+	// end::entity-save[]
 	
 	public void remove() {
-        accountService.remove(getInstance(), TideResponders.of(
-        	tre -> setInstance(null),
-        	tfe -> System.out.println("Could not delete account: " + tfe.getFault()
-        )));
+        accountService.remove(getInstance(), new TideResponder<Void>() {
+			@Override
+			public void result(TideResultEvent<Void> tre) {
+				setInstance(null);
+			}
+			
+			@Override
+			public void fault(TideFaultEvent tfe) {
+				System.out.println("Could not delete account: " + tfe.getFault());
+			}        	
+        });
 	}
 }

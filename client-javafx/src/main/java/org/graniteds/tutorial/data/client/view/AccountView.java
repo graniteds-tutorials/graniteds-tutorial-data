@@ -2,6 +2,10 @@ package org.graniteds.tutorial.data.client.view;
 
 import javafx.animation.TranslateTransition;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,13 +16,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
+import org.graniteds.tutorial.data.client.Account;
 import org.graniteds.tutorial.data.client.AccountController;
 
 import de.jensd.fx.fontawesome.AwesomeIcon;
 
 public class AccountView extends VBox {
 	
-    public AccountView(AccountController account) {
+    public AccountView(final AccountController account) {
 		setSpacing(10);
         setPadding(new Insets(10));
         setMaxWidth(Double.MAX_VALUE);
@@ -56,50 +61,76 @@ public class AccountView extends VBox {
 
         getChildren().add(buttonBar);
         
-        titleLabel.textProperty().bind(Bindings.when(account.savedProperty()).then("Edit account").otherwise("Create account"));
-
         // tag::form-ui[]
-        account.instanceProperty().addListener((instance, oldValue, newValue) -> {
-        	if (oldValue != null) {
-                nameField.textProperty().unbindBidirectional(oldValue.nameProperty());
-                emailField.textProperty().unbindBidirectional(oldValue.emailProperty());
-        	}
-        	
-            if (newValue != null) {
-                nameField.textProperty().bindBidirectional(newValue.nameProperty());
-                emailField.textProperty().bindBidirectional(newValue.emailProperty());
+        account.instanceProperty().addListener(new ChangeListener<Account>() {
+			@Override
+			public void changed(ObservableValue<? extends Account> obs,
+					Account oldValue, Account newValue) {
+	        	if (oldValue != null) {
+	                nameField.textProperty().unbindBidirectional(oldValue.nameProperty()); // <1>
+	                emailField.textProperty().unbindBidirectional(oldValue.emailProperty());
+	        	}
+	        	
+	            if (newValue != null) {
+	                nameField.textProperty().bindBidirectional(newValue.nameProperty());
+	                emailField.textProperty().bindBidirectional(newValue.emailProperty());
+	                
+	                double width = ((Region)getParent()).getWidth();
+	                double fromX = ((Region)getParent()).getTranslateX() + width;
+	                
+	                setTranslateX(fromX);
+	                setPrefWidth(width);
+	                setVisible(true);	// <2>
+	                setManaged(true);
+	                showTransition.setByX(-width);
+	                showTransition.play();
+	            }
+	            else {
+	                hideTransition.onFinishedProperty().set(new EventHandler<ActionEvent>() {						
+						@Override
+						public void handle(ActionEvent e) {
+							setVisible(false);
+		                    setManaged(false);
+						}
+					});
+	                
+	                hideTransition.setByX(getPrefWidth());
+	                hideTransition.play();
+	            }
+			}
+		});
 
-                double width = ((Region)getParent()).getWidth();
-                double fromX = ((Region)getParent()).getTranslateX() + width;
+        saveButton.disableProperty().bind(Bindings.not(account.dirtyProperty())); // <3>
 
-                setTranslateX(fromX);
-                setPrefWidth(width);
-                setVisible(true);
-                setManaged(true);
-                showTransition.setByX(-width);
-                showTransition.play();
-            }
-            else {
-                hideTransition.onFinishedProperty().set(e -> {
-                    setVisible(false);
-                    setManaged(false);
-                });
-
-                hideTransition.setByX(getPrefWidth());
-                hideTransition.play();
-            }
+        titleLabel.textProperty().bind(Bindings.	// <4>
+        		when(account.savedProperty()).
+        		then("Edit account").otherwise("Create account")
+        );
+        deleteButton.visibleProperty().bind(account.savedProperty());
+        deleteButton.managedProperty().bind(account.savedProperty());        
+        
+        saveButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) { // <5>
+				account.save();
+			}        	
         });
-
-        saveButton.setOnAction(e -> account.save());
-        saveButton.disableProperty().bind(Bindings.not(account.dirtyProperty())); // <6>
-
-        deleteButton.setOnAction(e -> account.remove());
-        deleteButton.visibleProperty().bind(account.savedProperty()); // <7>
-        deleteButton.managedProperty().bind(account.savedProperty());
         
-        cancelButton.setOnAction(e -> account.setInstance(null));
+        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				account.remove();
+			}
+        });
         
-        setVisible(false);
+        cancelButton.setOnAction(new EventHandler<ActionEvent>() { // <6>
+			@Override
+			public void handle(ActionEvent e) {
+				account.setInstance(null);
+			}
+        });
+        
+        setVisible(false);	// <7>
         setManaged(false);
         // end::form-ui[]
     }

@@ -36,8 +36,9 @@ It can be set in the main menu _Workspace -> Preferences_, then _General > Works
 endif::[]
 
 ifeval::["{client}" == "javafx"]
-NOTE: The compilation of the JavaFX project in Eclipse requires adding the +jfxrt.jar+ library to the classpath. The provided project expects a 
-variable named +JFX_LIB+ which should point to this library and which can be set in the main menu _Workspace > Preferences_, then _Java > Build Path > Variables_.
+NOTE: The compilation of the JavaFX project in Eclipse requires adding the +jfxrt.jar+ library to the classpath. The provided Eclipse 
+project expects a variable named +JFX_LIB+ which should point to this library and which can be set in the main menu _Workspace > Preferences_, 
+then _Java > Build Path > Variables_.
 Alternatively you can simply add manually the library to the project classpath or add it to the JDK library itself.
 endif::[]
 
@@ -68,6 +69,7 @@ http://www.jboss.org/jbossas/downloads/[here] (it's named JBoss EAP 6.1.0.Final)
 mvn install:install-file -DgroupId=org.jboss.as -DartifactId=jboss-as-dist -Dversion=7.2.0.Final -Dpackaging=zip -Dfile=/path/to/jboss
 ----
 
+ifeval::["{server}" == "spring"]
 .GlassFish 3.1.2.2
 ----
 mvn embedded-glassfish:run
@@ -77,6 +79,18 @@ mvn embedded-glassfish:run
 ----
 mvn tomee:run
 ----
+endif::[]
+
+ifeval::["{server}" == "ejb"]
+NOTE: GlassFish and TomEE are not yet supported with this tutorial because EclipseLink and OpenJPA are not yet supported by the JMF
+encoding used with JavaFX. However the tutorial war can be deployed on a GlassFish / TomEE instance where Hibernate is setup as JPA
+provider.
+endif::[]
+ifeval::["{server}" == "cdi"]
+NOTE: GlassFish and TomEE are not yet supported with this tutorial because EclipseLink and OpenJPA are not yet supported by the JMF
+encoding used with JavaFX. However the tutorial war can be deployed on a GlassFish / TomEE instance where Hibernate is setup as JPA
+provider.
+endif::[]
 
 ifeval::["{client}" == "javafx"]
 Before launching the JavaFX client, it is first necessary to build a proper executable jar with the http://zenjava.com/javafx/maven/[Zenjava JavaFX plugin]:

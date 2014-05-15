@@ -61,6 +61,19 @@
         </profile>
 
         <profile>
+            <id>client-javafx8</id>
+            <activation>
+                <property>
+                    <name>client</name>
+                    <value>javafx8</value>
+                </property>
+            </activation>
+            <modules>
+                <module>client-javafx8</module>
+            </modules>
+        </profile>
+
+        <profile>
             <id>client-flex</id>
             <activation>
                 <property>

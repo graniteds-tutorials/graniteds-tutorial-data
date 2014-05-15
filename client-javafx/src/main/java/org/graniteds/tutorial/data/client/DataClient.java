@@ -31,9 +31,7 @@ public class DataClient extends Application {
         Application.launch(DataClient.class, args);
     }
 
-    // tag::client-init[]
-    private Context context; // <1>
-    // end::client-init[]
+    public static Context context;
     
     private ServerSession serverSession;
     private DataObserver dataObserver;
@@ -41,32 +39,23 @@ public class DataClient extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // tag::client-setup[]
-    	context = new SimpleContextManager(new JavaFXApplication(this, stage)).getContext();
+    	context = new SimpleContextManager(new JavaFXApplication(this, stage)).getContext(); // <1>
     	
         serverSession = context.set(new ServerSession("/data", "localhost", 8080)); // <2>
         serverSession.addRemoteAliasPackage("org.graniteds.tutorial.data.client"); // <3>
         serverSession.start(); // <4>
         // end::client-setup[]
         
-        final AccountService accountService = context.set(new AccountService(serverSession));
+        // tag::mvc-setup[]
+        final AccountService accountService = context.set("accountService", // <1>
+        		new AccountService(serverSession));
         
-        // tag::list-setup[]
-<<<<<<< HEAD
-        final AccountService accountService = context.set("accountService", new AccountService(serverSession));
+        final PagedQuery<Account, Map<String, String>> accountsList = context.set( // <2>
+        		new PagedQuery<Account, Map<String, String>>(accountService, "findByFilter", 40) {});
         
-        final PagedQuery<Account, Map<String, String>> accountsQuery = context.set(new PagedQuery<Account, Map<String, String>>(serverSession));
-        accountsQuery.setMaxResults(40);
-        accountsQuery.setMethodName("findByFilter");
-        accountsQuery.setElementClass(Account.class);
-        accountsQuery.setRemoteComponentClass(AccountService.class);
-=======
-        final PagedQuery<Account, Map<String, String>> accountsList = context.set(new PagedQuery<Account, Map<String, String>>(accountService, accountService::findByFilter, 40) {});
->>>>>>> gds310
-        // end::list-setup[]
-        
-        // tag::controller-setup[]
-        final AccountController accountController = context.set(new AccountController(accountService));
-        // end::controller-setup[]
+        final AccountController accountController = context.set( // <3>
+        		new AccountController(accountService));
+        // end::mvc-setup[]
         
         // tag::data-setup[]
         dataObserver = context.set("dataTopic", new DataObserver(serverSession));
@@ -75,10 +64,11 @@ public class DataClient extends Application {
         dataObserver.subscribe();
         // end::data-setup[]
 
+        // tag::client-ui[]
 		VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
         vbox.setSpacing(10);
-
+        
         Label titleLabel = new Label("Account Manager Example");
         titleLabel.setMaxWidth(Double.MAX_VALUE);
         titleLabel.setStyle("-fx-padding: 10 10 10 10; -fx-background-color: #97b54b; -fx-text-fill: white");
@@ -96,9 +86,10 @@ public class DataClient extends Application {
         stackPane.getChildren().add(accountView);
         
         Scene scene = new Scene(vbox, 360, 400);
-        stage.setTitle("GraniteDS Data Tutorial - JavaFX 8");
+        stage.setTitle("GraniteDS Data Tutorial - JavaFX");
         stage.setScene(scene);
         stage.show();
+        // end::client-ui[]
     }
 
     // tag::client-close[]

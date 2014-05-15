@@ -117,7 +117,7 @@ Here is the relevant part of the +pom.xml+:
 ----
 <plugins>
     <plugin>
-include::https://raw.github.com/graniteds-tutorials/graniteds-tutorial/master/client-flex/pom.xml[tags=maven-generate]
+include::https://raw.githubusercontent.com/graniteds-tutorials/graniteds-tutorial/master/client-flex/pom.xml[tags=maven-generate]
     ...
     </plugin>
 </plugins>
@@ -129,5 +129,5 @@ and server class names.
 Finally, here are the maven dependencies for the Flex module:
 [source,xml,indent=0]
 ----
-include::https://raw.github.com/graniteds-tutorials/graniteds-tutorial/master/client-flex/pom.xml[tags=maven-deps]
+include::https://raw.githubusercontent.com/graniteds-tutorials/graniteds-tutorial/master/client-flex/pom.xml[tags=maven-deps]
 ----
