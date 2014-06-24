@@ -85,6 +85,9 @@
                 var context:Context = Spring.getInstance().getSpringContext();
 
                 accountsQuery = context.accountsQuery;
+//				accountsQuery.sort = new Sort();
+//				accountsQuery.sort.fields = [ new SortField("name") ];
+				
             	accountService = context.byType(AccountService) as AccountService;
 
                 // tag::data-setup[]

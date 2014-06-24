@@ -28,12 +28,12 @@
     <parent>
         <groupId>org.graniteds.tutorials</groupId>
         <artifactId>tutorial-parent-server-cdi</artifactId>
-        <version>3.1.0.M1</version>
+        <version>3.1.0.RC1</version>
     </parent>
 
     <artifactId>tutorial-data-server-cdi</artifactId>
     <packaging>war</packaging>
-    <version>3.1.0.M1</version>
+    <version>3.1.0.RC1</version>
     <name>GraniteDS Data Tutorial - CDI Server</name>
 
     <properties>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>org.graniteds.tutorials</groupId>
             <artifactId>tutorial-data-server-model</artifactId>
-            <version>3.1.0.M1</version>
+            <version>3.1.0.RC1</version>
         </dependency>
     </dependencies>
 

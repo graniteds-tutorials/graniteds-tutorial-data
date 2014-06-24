@@ -2,7 +2,6 @@ package org.graniteds.tutorial.data.app;
 
 import org.granite.config.servlet3.ServerFilter;
 import org.granite.gravity.config.servlet3.MessagingDestination;
-import org.granite.messaging.service.annotations.RemoteDestination;
 import org.granite.tide.ejb.EjbConfigProvider;
 
 // tag::server-filter[]

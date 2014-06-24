@@ -32,8 +32,8 @@ public class AccountController extends ManagedEntity<Account> {
 	public void save() {
         if (!validator.validate(getInstance()).isEmpty()) // <1>
             return;
-
-        accountService.save(getInstance(), new TideResponder<Void>() { // <2>
+        
+        accountService.save(getInstance(), new TideResponder<Void>() {
 			@Override
 			public void result(TideResultEvent<Void> tre) { // <3>
 				setInstance(null);
@@ -43,7 +43,7 @@ public class AccountController extends ManagedEntity<Account> {
 			public void fault(TideFaultEvent tfe) { // <4>
 				System.out.println("Could not save account: " + tfe.getFault()); 
 			}        	
-        });
+		});
 	}
 	// end::entity-save[]
 	
