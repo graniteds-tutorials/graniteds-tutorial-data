@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Account List Example</string>
+    
+    <string name="menu_new">New</string>
+    <string name="menu_search">Search</string>
+    
+    <string name="edit_account">Edit account</string>
+    <string name="create_account">Create account</string>
+    
+    <string name="name">Name</string>
+    <string name="email">E-mail</string>
+    <string name="picture">Picture</string>
+    
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+</resources>

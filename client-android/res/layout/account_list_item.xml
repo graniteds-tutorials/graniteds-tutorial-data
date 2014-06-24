@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+    
+    <ImageView
+        android:id="@+id/image_gravatar"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/picture"
+        android:gravity="center"
+        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+        android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+        android:tag="gravatarUrl=$item.gravatarUrl"
+        tools:src="@drawable/ic_launcher" />
+    
+	<LinearLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    tools:context=".AccountListFragment" >
+		
+	    <TextView
+	        android:id="@+id/text_name"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background="?android:attr/activatedBackgroundIndicator"
+	        android:gravity="center_vertical"
+	        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+	        android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+        	android:tag="text=$item.name"
+	        tools:text="William"
+	        android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+		
+	    <TextView
+	        android:id="@+id/text_email"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background="?android:attr/activatedBackgroundIndicator"
+	        android:gravity="center_vertical"
+	        android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"
+	        android:paddingRight="?android:attr/listPreferredItemPaddingRight"
+	        android:paddingBottom="5dp"
+	        android:tag="text=$item.email"
+	        tools:text="william@graniteds.org"
+	        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+	        android:textSize="14sp" />
+	
+	</LinearLayout>    
+    
+</LinearLayout>
+
