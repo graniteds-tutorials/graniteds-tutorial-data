@@ -15,26 +15,27 @@ import org.graniteds.tutorial.data.client.view.AccountView;
 @Module
 public class App {
 	
+	// tag::client-setup[]
 	@Singleton
 	public static ServerSession serverSession() throws Exception {
-		ServerSession serverSession = new ServerSession("/data", "localhost", 8080);
-        serverSession.addRemoteAliasPackage("org.graniteds.tutorial.data.client");
+		ServerSession serverSession = new ServerSession("/data", "localhost", 8080);	// <1>
+        serverSession.addRemoteAliasPackage("org.graniteds.tutorial.data.client");		// <2>
         return serverSession;
 	}
 	
-	@Singleton
-	public static AccountService accountService(ServerSession serverSession) {
-		return new AccountService(serverSession);
-	}
-	
 	@Singleton @Named
-	public static AccountController account(AccountService accountService) {
-		return new AccountController(accountService);
+	public static AccountService accountService(ServerSession serverSession) {
+		return new AccountService(serverSession);		// <3>
 	}
 	
 	@Singleton @Named
 	public static PagedQuery<Account, Map<String, String>> accountsList(AccountService accountService) {
-		return new PagedQuery<Account, Map<String, String>>(accountService, "findByFilter", 20) {};
+		return new PagedQuery<Account, Map<String, String>>(accountService, "findByFilter", 20) {};	// <4>
+	}
+	
+	@Singleton @Named
+	public static AccountController account(AccountService accountService) {
+		return new AccountController(accountService);		// <5>
 	}
 	
 	@Singleton @Named
@@ -51,4 +52,5 @@ public class App {
 	public static AccountView accountsView(@Named("account") AccountController account) {
 		return new AccountView(account);
 	}
+	// end::client-setup[]
 }

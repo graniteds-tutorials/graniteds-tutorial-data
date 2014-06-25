@@ -38,26 +38,29 @@ Here is the source code for the first bootstrap/configuration part:
 include::{srcdir}/main/java/org/graniteds/tutorial/data/client/DataClient.java[tags=client-setup]
 ----
 <1> Bootstrap the GraniteDS Tide context and store it in a static variable to we can access it from anywhere in the application.
-<2> Configure a +ServerSession+ object in the context with the server url and context path.
-<3> Configure the +ServerSession+ with the package name of the entities that will be serialized (see <<client.generation,
-client generation>> below) so the framework can detect +@RemoteAlias+ names on the client entities. 
-<4> Start the server session, initializing all required resources.
+<2> Load the configuration module class +App+
+<3> Set the current application in the Tide context (and apply dependency injection if needed)
 
-Then the main class configures the MVC components of the application. In more complex applications this could be done
-in a Spring or CDI container, here we just use the built-in simple component container:
+The module configuration class +App+ for the built-in component container is relatively similar to a Spring Java configuration class. 
+It defines the application components and allows for a very basic depenency injection. 
+Note that in complex cases, it's recommended to use a real DI container such as Spring or CDI. 
 
 [source,java,indent=0]
-.main/java/org/graniteds/tutorial/data/client/DataClient.java
+.main/java/org/graniteds/tutorial/data/client/App.java
 ----
-include::{srcdir}/main/java/org/graniteds/tutorial/data/client/DataClient.java[tags=mvc-setup]
+include::{srcdir}/main/java/org/graniteds/tutorial/data/client/App.java[tags=client-setup]
 ----
-<1> +AccountService+ is a generated client proxy for the remote service. We give it the name +accountService+ which should 
+<1> Configure a +ServerSession+ object in the context with the server url and context path.
+<2> Configure the +ServerSession+ with the package name of the entities that will be serialized (see <<client.generation,
+client generation>> below) so the framework can detect +@RemoteAlias+ names on the client entities. 
+<3> +AccountService+ is a generated client proxy for the remote service. We give it the name +accountService+ which should 
 	match the name of the remote service (Spring bean, EJB, ...).
-<2> +accountsList+ is a +PagedQuery+. The first type parameter +Account+ is the type of the elements of the list, the 
-	second +Map<String, String>+ is the type of the search filter, here a simple +Map+. The +PagedQuery+ constructor takes
-	a reference	to the remote service and to the remote method to call to execute the query, and last the page size
-	which should be approximately twice the expected number of elements displayed at the same time in the view. 
-<3> +AccountController+ is a subclass of +ManagedEntity+ and manages the current displayed or edited account. 
+<4> +accountsList+ is a +PagedQuery+, which is a client view of a remote query. The first type parameter +Account+ is the type 
+	of the elements of the list, the second +Map<String, String>+ is the type of the search filter, here a simple +Map+. 
+	The +PagedQuery+ constructor takes a reference to the remote service and to the remote method to call to execute the query, 
+	and last the page size which should be approximately twice the expected number of elements displayed at the same time in the view. 
+<5> +AccountController+ is an entity controller (the C part of MVC) which holds the state of the current displayed/edited
+	+Account+ object and handles the interactions between the UI and the server 
 
 [IMPORTANT]
 ====
@@ -66,8 +69,8 @@ and filter types from the generic type of the class. Without it, it would be nec
 +accountsList.setElementClass(Account.class)+ and +accountsList.setFilterClass()+ when the filter type is not +Map+.
 ====
 
-Finally the main class creates the two views +AccountListView+ and +AccountView+, giving them references to the 
-controllers, and put them in a +StackPane+.
+Finally the configuration class defines the two views +AccountListView+ and +AccountView+, giving them references to the 
+controllers. These views will are then put in a +StackPane+ by the main client class:
 
 [source,java,indent=0]
 .main/java/org/graniteds/tutorial/data/client/DataClient.java

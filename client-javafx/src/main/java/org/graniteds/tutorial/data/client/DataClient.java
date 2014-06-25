@@ -48,17 +48,19 @@ public class DataClient extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // tag::client-setup[]
-    	contextManager = new SimpleContextManager(new JavaFXApplication(this, stage));
-    	contextManager.initModules(App.class);
-    	contextManager.getContext().set(this);
+    	contextManager = new SimpleContextManager(new JavaFXApplication(this, stage));	// <1>
+    	contextManager.initModules(App.class);	// <2>
+    	contextManager.getContext().set(this);	// <3>
+        // end::client-setup[]
     	
-        serverSession.start(); // <4>
+        serverSession.start();
         
+        // tag::data-setup[]
         dataTopic.start();
         
         dataTopic.subscribe();
         // end::data-setup[]
-
+        
         // tag::client-ui[]
 		VBox vbox = new VBox();
         vbox.setPadding(new Insets(10));
@@ -84,7 +86,7 @@ public class DataClient extends Application {
         stage.show();
         // end::client-ui[]
     }
-
+    
     // tag::client-close[]
     @Override
     public void stop() throws Exception {
