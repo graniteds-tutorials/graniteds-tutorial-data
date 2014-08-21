@@ -23,7 +23,7 @@ public class App {
         return serverSession;
 	}
 	
-	@Singleton @Named
+	@Singleton
 	public static AccountService accountService(ServerSession serverSession) {
 		return new AccountService(serverSession);		// <3>
 	}
