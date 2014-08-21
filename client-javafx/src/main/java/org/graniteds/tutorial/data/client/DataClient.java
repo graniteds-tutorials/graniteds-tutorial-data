@@ -14,11 +14,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.granite.client.javafx.tide.JavaFXApplication;
+import org.granite.client.tide.data.Conflicts;
+import org.granite.client.tide.data.DataConflictListener;
 import org.granite.client.tide.data.DataObserver;
+import org.granite.client.tide.data.EntityManager;
 import org.granite.client.tide.impl.SimpleContextManager;
 import org.granite.client.tide.server.ServerSession;
 import org.graniteds.tutorial.data.client.view.AccountListView;
 import org.graniteds.tutorial.data.client.view.AccountView;
+import org.graniteds.tutorial.data.client.view.ConflictDialog;
 
 
 public class DataClient extends Application {
@@ -44,13 +48,26 @@ public class DataClient extends Application {
     @Inject
     private AccountView accountView;
     
+    @Inject
+    private EntityManager entityManager;
+    
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(final Stage stage) throws Exception {
         // tag::client-setup[]
     	contextManager = new SimpleContextManager(new JavaFXApplication(this, stage));	// <1>
     	contextManager.initModules(App.class);	// <2>
     	contextManager.getContext().set(this);	// <3>
+        
+        entityManager.addListener(new DataConflictListener() {
+			@Override
+			public void onConflict(EntityManager entityManager, Conflicts conflicts) {
+				if (ConflictDialog.show(stage))
+					conflicts.acceptAllServer();
+				else
+					conflicts.acceptAllClient(); 
+			}
+		});
         // end::client-setup[]
     	
         serverSession.start();
