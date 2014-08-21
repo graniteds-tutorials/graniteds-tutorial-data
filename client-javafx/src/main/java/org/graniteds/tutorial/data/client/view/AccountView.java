@@ -11,6 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -145,12 +147,24 @@ public class AccountView extends VBox {
 			@Override
 			public void handle(ValidationResultEvent event) {
 				((Node)event.getTarget()).setStyle("-fx-border-color: red");
+				if (event.getTarget() instanceof TextInputControl && event.getErrorResults() != null && event.getErrorResults().size() > 0) {
+                    Tooltip tooltip = new Tooltip(event.getErrorResults().get(0).getMessage());
+                    tooltip.setStyle("-fx-background-color: #ff9080");
+                    tooltip.setAutoHide(true);
+                    ((TextInputControl)event.getTarget()).setTooltip(tooltip);
+                }
 			}
 		});
         addEventHandler(ValidationResultEvent.VALID, new EventHandler<ValidationResultEvent>() {
 			@Override
 			public void handle(ValidationResultEvent event) {
 	            ((Node)event.getTarget()).setStyle("-fx-border-color: null");
+	            if (event.getTarget() instanceof TextInputControl) {
+	                Tooltip tooltip = ((TextInputControl)event.getTarget()).getTooltip();
+	                if (tooltip != null && tooltip.isActivated())
+	                    tooltip.hide();
+	                ((TextInputControl)event.getTarget()).setTooltip(null);
+	            }
 			}
         });
         
