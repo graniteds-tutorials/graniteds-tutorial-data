@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,6 +17,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
+import org.granite.client.javafx.validation.FormValidator;
+import org.granite.client.javafx.validation.ValidationResultEvent;
+import org.granite.client.validation.NotifyingValidatorFactory;
 import org.graniteds.tutorial.data.client.Account;
 import org.graniteds.tutorial.data.client.AccountController;
 
@@ -23,7 +27,9 @@ import de.jensd.fx.fontawesome.AwesomeIcon;
 
 public class AccountView extends VBox {
 	
-    public AccountView(final AccountController account) {
+	private final FormValidator formValidator;
+	
+    public AccountView(final AccountController account, NotifyingValidatorFactory validatorFactory) {
 		setSpacing(10);
         setPadding(new Insets(10));
         setMaxWidth(Double.MAX_VALUE);
@@ -69,11 +75,13 @@ public class AccountView extends VBox {
 	        	if (oldValue != null) {
 	                nameField.textProperty().unbindBidirectional(oldValue.nameProperty()); // <1>
 	                emailField.textProperty().unbindBidirectional(oldValue.emailProperty());
+	        	    formValidator.entityProperty().unbind();
 	        	}
 	        	
 	            if (newValue != null) {
 	                nameField.textProperty().bindBidirectional(newValue.nameProperty());
 	                emailField.textProperty().bindBidirectional(newValue.emailProperty());
+	        	    formValidator.entityProperty().bind(account.instanceProperty());
 	                
 	                double width = ((Region)getParent()).getWidth();
 	                double fromX = ((Region)getParent()).getTranslateX() + width;
@@ -99,7 +107,7 @@ public class AccountView extends VBox {
 	            }
 			}
 		});
-
+        
         saveButton.disableProperty().bind(Bindings.not(account.dirtyProperty())); // <3>
 
         titleLabel.textProperty().bind(Bindings.	// <4>
@@ -127,6 +135,22 @@ public class AccountView extends VBox {
 			@Override
 			public void handle(ActionEvent e) {
 				account.setInstance(null);
+			}
+        });
+        
+        formValidator = new FormValidator(validatorFactory);
+		formValidator.setForm(this);
+		
+		addEventHandler(ValidationResultEvent.INVALID, new EventHandler<ValidationResultEvent>() {
+			@Override
+			public void handle(ValidationResultEvent event) {
+				((Node)event.getTarget()).setStyle("-fx-border-color: red");
+			}
+		});
+        addEventHandler(ValidationResultEvent.VALID, new EventHandler<ValidationResultEvent>() {
+			@Override
+			public void handle(ValidationResultEvent event) {
+	            ((Node)event.getTarget()).setStyle("-fx-border-color: null");
 			}
         });
         

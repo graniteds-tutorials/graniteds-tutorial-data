@@ -4,11 +4,13 @@ import java.util.Map;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
+import javax.validation.ValidatorFactory;
 
 import org.granite.client.javafx.tide.collections.PagedQuery;
 import org.granite.client.tide.Module;
 import org.granite.client.tide.data.DataObserver;
 import org.granite.client.tide.server.ServerSession;
+import org.granite.client.validation.NotifyingValidatorFactory;
 import org.graniteds.tutorial.data.client.view.AccountListView;
 import org.graniteds.tutorial.data.client.view.AccountView;
 
@@ -34,8 +36,8 @@ public class App {
 	}
 	
 	@Singleton @Named
-	public static AccountController account(AccountService accountService) {
-		return new AccountController(accountService);		// <5>
+	public static AccountController account(AccountService accountService, ValidatorFactory validatorFactory) {
+		return new AccountController(accountService, validatorFactory);		// <5>
 	}
 	
 	@Singleton @Named
@@ -49,8 +51,8 @@ public class App {
 	}
 	
 	@Singleton
-	public static AccountView accountsView(@Named("account") AccountController account) {
-		return new AccountView(account);
+	public static AccountView accountsView(@Named("account") AccountController account, NotifyingValidatorFactory validatorFactory) {
+		return new AccountView(account, validatorFactory);
 	}
 	// end::client-setup[]
 }

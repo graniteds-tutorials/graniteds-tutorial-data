@@ -8,8 +8,7 @@
 package org.graniteds.tutorial.data.client;
 
 import javax.inject.Named;
-import javax.validation.Validation;
-import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.granite.client.javafx.tide.ManagedEntity;
 import org.granite.client.tide.server.TideFaultEvent;
@@ -19,18 +18,19 @@ import org.granite.client.tide.server.TideResultEvent;
 
 @Named
 public class AccountController extends ManagedEntity<Account> {
-
-	private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+	
+    private ValidatorFactory validatorFactory;
 	
 	private AccountService accountService;
 	
-	public AccountController(AccountService accountService) {
+	public AccountController(AccountService accountService, ValidatorFactory validatorFactory) {
 		this.accountService = accountService;
+		this.validatorFactory = validatorFactory;
 	}
 	
 	// tag::entity-save[]
 	public void save() {
-        if (!validator.validate(getInstance()).isEmpty()) // <1>
+        if (!validatorFactory.getValidator().validate(getInstance()).isEmpty()) // <1>
             return;
         
         accountService.save(getInstance(), new TideResponder<Void>() {
