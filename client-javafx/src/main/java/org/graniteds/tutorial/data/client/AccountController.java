@@ -33,7 +33,7 @@ public class AccountController extends ManagedEntity<Account> {
         if (!validatorFactory.getValidator().validate(getInstance()).isEmpty()) // <1>
             return;
         
-        accountService.save(getInstance(), new TideResponder<Void>() {
+        accountService.save(getInstance(), new TideResponder<Void>() { // <2>
 			@Override
 			public void result(TideResultEvent<Void> tre) { // <3>
 				setInstance(null);
