@@ -31,8 +31,11 @@ And the basic GraniteDS setup (bootstrap servlet listener, remoting servlet and 
 include::{srcdir}/main/webapp/WEB-INF/web.xml[tags=webxml-graniteds]
 ----
 <1> GraniteDS bootstrap servlet listener
-<2> Url mapping of the dispatcher servlet for GraniteDS, +/graniteamf/*+ is the recommended default
-<3> Url mapping of the asynchronous servlet for GraniteDS, +/gravityamf/*+ is the recommended default
+<2> Force the creation of an HTTP session, which is required for advanced data conflicts management.
+	This filter is generally useless with real-world applications: authentication forces the creation
+	of the session.
+<3> Url mapping of the dispatcher servlet for GraniteDS, +/graniteamf/*+ is the recommended default
+<4> Url mapping of the asynchronous servlet for GraniteDS, +/gravityamf/*+ is the recommended default
 
 The actual Spring application context is defined in +application-context.xml+, the declaration of GraniteDS simply
 consists in the +graniteds+ XML namespace declaration:
