@@ -5,7 +5,7 @@ import org.granite.gravity.config.servlet3.MessagingDestination;
 import org.granite.tide.ejb.EjbConfigProvider;
 
 // tag::server-filter[]
-@ServerFilter(configProviderClass=EjbConfigProvider.class) // <1>
+@ServerFilter(configProviderClass=EjbConfigProvider.class, forceCreateSession=true) // <1>
 public class DataApplication {
 
     @MessagingDestination(noLocal=true, sessionSelector=true)
