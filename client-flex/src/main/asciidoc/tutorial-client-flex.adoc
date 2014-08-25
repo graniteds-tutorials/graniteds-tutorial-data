@@ -101,7 +101,22 @@ on the server. This component will receive all updates from all clients and prop
 include::{srcdir}/main/flex/data.mxml[tags=data-setup]
 ----
 
-The added and removed entities are transparently handled by the +PagedQuery+ which will refresh itself.
+The added and removed entities are transparently handled by the +PagedQuery+ which will refresh itself. The above code
+also configure a handler for data conflicts, see next section.
+
+=== Conflicts management
+
+When an entity is modified concurrently by two different users, the first modification persisted by one user is
+sent to the other through the real-time data push channel. Tide detects a conflict, which is dispatched to the handler
+configured above.
+
+[source,actionscript,indent=0]
+----
+include::{srcdir}/main/flex/data.mxml[tags=conflict-actions]
+----
+<1> The +conflictsHandler+ asks the user if he wants to keep his current modifications or accept all
+	incoming data.
+<2> Based on the user's response, the account being edited is kept as is or reset to the new persisted state.
 
 === Code generation
 
