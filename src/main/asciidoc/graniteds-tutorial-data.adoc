@@ -57,6 +57,11 @@ mvn tomcat7:run-war
 ----
 endif::[]
 
+.WildFly 8
+----
+mvn wildfly:run
+----
+
 .JBoss AS 7.2
 ----
 mvn jboss-as:run -Djboss-as.version=7.2.0.Final

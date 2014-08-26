@@ -10,12 +10,14 @@ import javax.persistence.PersistenceContext;
 import org.granite.tide.data.model.Page;
 import org.granite.tide.data.model.PageInfo;
 import org.graniteds.tutorial.data.entities.Account;
+import org.graniteds.tutorial.data.services.AccountSearch;
+import org.graniteds.tutorial.data.services.AccountService;
 
 // tag::service-impl[]
 @Stateless
 @Local(AccountService.class)
 public class AccountServiceBean implements AccountService {
-
+	
     @PersistenceContext
     private EntityManager entityManager;
 

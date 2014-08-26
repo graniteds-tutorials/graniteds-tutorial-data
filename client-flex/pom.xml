@@ -9,11 +9,11 @@
     <parent>
         <groupId>org.graniteds.tutorials</groupId>
         <artifactId>tutorial-parent-client-flex</artifactId>
-        <version>3.1.0.RC1</version>
+        <version>3.1.0.GA</version>
     </parent>
 	
     <artifactId>tutorial-data-client-flex</artifactId>
-	<version>3.1.0.RC1</version>
+	<version>3.1.0.GA</version>
     <packaging>swf</packaging>
     <name>GraniteDS Data Tutorial - Flex Client</name>
 
@@ -28,7 +28,8 @@
         <dependency>
             <groupId>org.graniteds.tutorials</groupId>
             <artifactId>tutorial-data-server-model</artifactId>
-            <version>3.1.0.RC1</version>
+            <version>3.1.0.GA</version>
+	    <scope>provided</scope>
         </dependency>
     </dependencies>
     <!-- end::maven-gen-dep[] -->

@@ -19,13 +19,13 @@ public class App {
 	
 	// tag::client-setup[]
 	@Singleton
-	public static ServerSession serverSession() throws Exception {
+	public static ServerSession serverSession() {
 		ServerSession serverSession = new ServerSession("/data", "localhost", 8080);	// <1>
         serverSession.addRemoteAliasPackage("org.graniteds.tutorial.data.client");		// <2>
         return serverSession;
 	}
 	
-	@Singleton
+	@Singleton @Named
 	public static AccountService accountService(ServerSession serverSession) {
 		return new AccountService(serverSession);		// <3>
 	}
@@ -46,12 +46,12 @@ public class App {
 	}
 	
 	@Singleton
-	public static AccountListView accountsListView(@Named("accountsList") PagedQuery<Account, Map<String, String>> accountsList, @Named("account") AccountController account) {
+	public static AccountListView accountsListView(PagedQuery<Account, Map<String, String>> accountsList, AccountController account) {
 		return new AccountListView(accountsList, account);
 	}
 	
 	@Singleton
-	public static AccountView accountsView(@Named("account") AccountController account, NotifyingValidatorFactory validatorFactory) {
+	public static AccountView accountsView(AccountController account, NotifyingValidatorFactory validatorFactory) {
 		return new AccountView(account, validatorFactory);
 	}
 	// end::client-setup[]

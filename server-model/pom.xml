@@ -28,11 +28,11 @@
     <parent>
         <groupId>org.graniteds.tutorials</groupId>
         <artifactId>tutorial-parent</artifactId>
-        <version>3.1.0.RC1</version>
+        <version>3.1.0.GA</version>
     </parent>
 
     <artifactId>tutorial-data-server-model</artifactId>
-	<version>3.1.0.RC1</version>
+	<version>3.1.0.GA</version>
     <packaging>jar</packaging>
     <name>GraniteDS Data Tutorial - Server Model</name>
 
@@ -42,13 +42,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
-            <scope>provided</scope>
-        </dependency>
-
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
@@ -61,29 +54,35 @@
             <artifactId>granite-server</artifactId>
             <version>${graniteds.version}</version>
         </dependency>
-
+		
         <dependency>
             <groupId>org.graniteds</groupId>
             <artifactId>granite-server-hibernate4</artifactId>
             <version>${graniteds.version}</version>
         </dependency>
-
+		
         <dependency>
-            <groupId>org.graniteds</groupId>
-            <artifactId>granite-server-eclipselink</artifactId>
-            <version>${graniteds.version}</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.3.6.Final</version>
+		      <exclusions>
+		        <exclusion>
+		          <artifactId>xml-apis</artifactId>
+		          <groupId>xml-apis</groupId>
+		        </exclusion>
+		      </exclusions>
         </dependency>
-
+        
         <dependency>
-            <groupId>org.graniteds</groupId>
-            <artifactId>granite-server-openjpa</artifactId>
-            <version>${graniteds.version}</version>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
         </dependency>
-
+        
         <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>2.3.1</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.181</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>

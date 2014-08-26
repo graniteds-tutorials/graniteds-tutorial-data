@@ -25,11 +25,11 @@
     <parent>
         <groupId>org.graniteds.tutorials</groupId>
         <artifactId>tutorial-parent-client-javafx</artifactId>
-        <version>3.1.0.RC1</version>
+        <version>3.1.0.GA</version>
     </parent>
 
     <artifactId>tutorial-data-client-javafx-di</artifactId>
-    <version>3.1.0.RC1</version>
+    <version>3.1.0.GA</version>
     <packaging>jar</packaging>
     <name>GraniteDS Data Tutorial - JavaFX / DI Container Client</name>
 
