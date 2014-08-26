@@ -138,7 +138,9 @@
             account = null;
             accountsList.selectedItem = null;
         }
+        // end::form-actions[]
         
+        // tag::conflict-actions[]
         private function conflictsHandler(event:TideDataConflictsEvent):void {
             conflicts = event.conflicts;
             Alert.show("Keep local state ?", "Data conflict",
@@ -151,7 +153,7 @@
             else
                 conflicts.acceptAllServer();
         }
-        // end::form-actions[]
+        // end::conflict-actions[]
         ]]>
     </fx:Script>
     

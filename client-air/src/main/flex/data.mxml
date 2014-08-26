@@ -136,20 +136,22 @@
                 account = null;
                 accountsList.selectedItem = null;
             }
+            // end::form-actions[]
         
-			private function conflictsHandler(event:TideDataConflictsEvent):void {
+        	// tag::conflict-actions[]
+			private function conflictsHandler(event:TideDataConflictsEvent):void { // <1>
 				conflicts = event.conflicts;
 				Alert.show("Keep local state ?", "Data conflict",
 					Alert.YES|Alert.NO, null, conflictsCloseHandler);
 			}
 		
-			private function conflictsCloseHandler(event:CloseEvent):void {
+			private function conflictsCloseHandler(event:CloseEvent):void { // <2>
 				if (event.detail == Alert.YES)
 					conflicts.acceptAllClient();
 				else
 					conflicts.acceptAllServer();
 			}
-            // end::form-actions[]
+        	// end::conflict-actions[]
         ]]>
     </fx:Script>
 
