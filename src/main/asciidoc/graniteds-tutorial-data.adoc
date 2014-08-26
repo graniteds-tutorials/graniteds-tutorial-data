@@ -110,7 +110,7 @@ java -jar target/jfx/app/data.jar
 endif::[]
 
 ifeval::["{client}" == "flex"]
-To run the Flex client, browse http://localhost:8080/data/data.swf[^]
+To run the Flex client, browse http://localhost:8080/data/[^]
 endif::[]
 
 ifeval::["{client}" == "air"]
