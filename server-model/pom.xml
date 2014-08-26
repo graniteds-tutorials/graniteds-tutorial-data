@@ -43,13 +43,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.0.0.GA</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.graniteds</groupId>
             <artifactId>granite-server</artifactId>
             <version>${graniteds.version}</version>
@@ -79,6 +72,13 @@
             <version>1.0.0.Final</version>
         </dependency>
         
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
