@@ -140,7 +140,7 @@ public class AccountView extends VBox {
 			}
         });
         
-        formValidator = new FormValidator(validatorFactory);
+        formValidator = new FormValidator(validatorFactory); // <7>
 		formValidator.setForm(this);
 		
 		addEventHandler(ValidationResultEvent.INVALID, new EventHandler<ValidationResultEvent>() {
@@ -168,7 +168,7 @@ public class AccountView extends VBox {
 			}
         });
         
-        setVisible(false);	// <7>
+        setVisible(false);	// <8>
         setManaged(false);
         // end::form-ui[]
     }

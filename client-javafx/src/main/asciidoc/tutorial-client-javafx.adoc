@@ -40,6 +40,7 @@ include::{srcdir}/main/java/org/graniteds/tutorial/data/client/DataClient.java[t
 <1> Bootstrap the GraniteDS Tide context and store it in a static variable to we can access it from anywhere in the application.
 <2> Load the configuration module class +App+
 <3> Set the current application in the Tide context (and apply dependency injection if needed)
+<4> Set a conflict management handler that will allow the user to accept or discard a concurrent modification made by another user.
 
 The module configuration class +App+ for the built-in component container is relatively similar to a Spring Java configuration class. 
 It defines the application components and allows for a very basic depenency injection. 
@@ -128,8 +129,9 @@ include::{srcdir}/main/java/org/graniteds/tutorial/data/client/view/AccountView.
 	so the title is changed if the entity is persisted or new.
 <5> We delegate the click on the __Save__ button to the +save+ method of the controller, same for __Delete__.
 <6> The __Cancel__ button simply unselected the current instance, causing the closing of the detail view
-	by the listener in <1>.  
-<7> Initially we set the view not visible so the list view is displayed.
+	by the listener in <1>.
+<7> Create and configure a +FormValidator+ to report validation errors to the user (red border and detail tooltip).
+<8> Initially we set the view not visible so the list view is displayed.
 
 === The entity controller
 

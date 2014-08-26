@@ -59,7 +59,7 @@ public class DataClient extends Application {
     	contextManager.initModules(App.class);	// <2>
     	contextManager.getContext().set(this);	// <3>
         
-        entityManager.addListener(new DataConflictListener() {
+        entityManager.addListener(new DataConflictListener() {	// <4>
 			@Override
 			public void onConflict(EntityManager entityManager, Conflicts conflicts) {
 				if (ConflictDialog.show(stage))

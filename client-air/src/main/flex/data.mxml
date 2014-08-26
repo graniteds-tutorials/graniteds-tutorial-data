@@ -5,6 +5,7 @@
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:mx="library://ns.adobe.com/flex/mx"
         xmlns:s="library://ns.adobe.com/flex/spark"
+        xmlns:v="org.granite.validation.*"
         width="360" height="400"
         currentState="{account ? 'editState' : 'listState'}"
         preinitialize="init()">
@@ -43,9 +44,15 @@
         }
     </fx:Style>
 
+	<fx:Declarations>
+    	<v:FormValidator id="fValidator" form="{editView}" entity="{account}"/>
+	</fx:Declarations>
+
     <fx:Script>
         <![CDATA[
             import mx.data.utils.Managed;
+			import mx.events.CloseEvent;
+			import mx.controls.Alert;
 
             import org.granite.tide.collections.PagedQuery;
             import org.granite.tide.data.DataObserver;
@@ -55,6 +62,8 @@
             import org.granite.validation.ValidatorFactory;
             import org.graniteds.tutorial.data.entities.Account;
             import org.graniteds.tutorial.data.services.AccountService;
+			import org.granite.tide.data.Conflicts;
+			import org.granite.tide.data.events.TideDataConflictsEvent;
 
             import spark.collections.Sort;
             import spark.collections.SortField;
@@ -63,6 +72,8 @@
             public var accountsQuery:PagedQuery;
 
             public var accountService:AccountService;
+        
+        	private var conflicts:Conflicts;
 
             private function init():void {
                 // tag::client-setup[]
@@ -85,12 +96,14 @@
                 var context:Context = Spring.getInstance().getSpringContext();
 
                 accountsQuery = context.accountsQuery;
-//				accountsQuery.sort = new Sort();
-//				accountsQuery.sort.fields = [ new SortField("name") ];
-				
+				accountsQuery.sort = new Sort();
+				accountsQuery.sort.fields = [ new SortField("name") ];
             	accountService = context.byType(AccountService) as AccountService;
 
                 // tag::data-setup[]
+				context.addEventListener(
+					TideDataConflictsEvent.DATA_CONFLICTS, conflictsHandler);
+
                 Spring.getInstance().addComponent("dataTopic", DataObserver);
 
                 context.dataTopic.subscribe();
@@ -106,9 +119,8 @@
             }
 
             private function save():void {
-                if (ValidatorFactory.getInstance().validate(account).length > 0) // <3>
-                    return;
-                accountService.save(account, closeEditor); // <4>
+				if (fValidator.validateEntity()) // <3>
+					accountService.save(account, closeEditor); // <4>
             }
 
             private function remove():void {
@@ -124,6 +136,19 @@
                 account = null;
                 accountsList.selectedItem = null;
             }
+        
+			private function conflictsHandler(event:TideDataConflictsEvent):void {
+				conflicts = event.conflicts;
+				Alert.show("Keep local state ?", "Data conflict",
+					Alert.YES|Alert.NO, null, conflictsCloseHandler);
+			}
+		
+			private function conflictsCloseHandler(event:CloseEvent):void {
+				if (event.detail == Alert.YES)
+					conflicts.acceptAllClient();
+				else
+					conflicts.acceptAllServer();
+			}
             // end::form-actions[]
         ]]>
     </fx:Script>

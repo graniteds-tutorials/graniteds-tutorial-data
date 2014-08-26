@@ -28,11 +28,11 @@
     <!-- Create Session filter (makes sure we have a HTTP session) -->
     <filter>
         <filter-name>createSession</filter-name>
-        <filter-class>org.granite.clustering.CreateSessionFilter</filter-class>
+        <filter-class>org.granite.clustering.CreateSessionFilter</filter-class> <!--2-->
     </filter>
     <filter-mapping>
         <filter-name>createSession</filter-name>
-        <url-pattern>/graniteamf/*</url-pattern> <!--2-->
+        <url-pattern>/graniteamf/*</url-pattern>
     </filter-mapping>
 
     <!-- Spring MVC dispatcher servlet -->
@@ -42,7 +42,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
-        <url-pattern>/graniteamf/*</url-pattern> <!--2-->
+        <url-pattern>/graniteamf/*</url-pattern> <!--3-->
     </servlet-mapping>
 
     <!-- Servlet 3 Async Gravity servlet -->
@@ -54,7 +54,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>gravity</servlet-name>
-        <url-pattern>/gravityamf/*</url-pattern> <!--3-->
+        <url-pattern>/gravityamf/*</url-pattern> <!--4-->
     </servlet-mapping>
     <!-- end::webxml-graniteds[] -->
 

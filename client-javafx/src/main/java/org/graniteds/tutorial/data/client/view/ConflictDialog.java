@@ -13,55 +13,64 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import javafx.stage.WindowEvent;
+import de.jensd.fx.fontawesome.AwesomeIcon;
 
 public class ConflictDialog {
 	
-	public static boolean show(Window parent) {
+	public static boolean show(final Window parent) {
 		final boolean[] result = new boolean[]{ false };
 		
-		final Stage dialog = new Stage(StageStyle.UTILITY);
-        dialog.setTitle("Conflict Management");
-        dialog.setResizable(false);
-        dialog.initModality(Modality.WINDOW_MODAL);
-        dialog.initOwner(parent);
+		final Stage conflict = new Stage(StageStyle.UTILITY);
+        conflict.setTitle("Conflict Management");
+        conflict.setResizable(false);
+        conflict.initModality(Modality.APPLICATION_MODAL);
+        conflict.initOwner(parent);
         
-        final VBox totalPane = new VBox();
-        dialog.setScene(new Scene(totalPane));
-        totalPane.setAlignment(Pos.CENTER);
-        totalPane.setPadding(new Insets(10, 10, 10, 10));
-        totalPane.setSpacing(10);
-        
-        final Label label = new Label("Conflict detected with another user modification:");
-        totalPane.getChildren().add(label);
-
-        final HBox pane = new HBox();
-        totalPane.getChildren().add(pane);
+        final VBox pane = new VBox();
+        conflict.setScene(new Scene(pane));
+        pane.setAlignment(Pos.CENTER);
+        pane.setPadding(new Insets(10, 10, 10, 10));
         pane.setSpacing(10);
         
-        final Button accept = new Button("Accept incoming data");
+        final Label label = new Label("Conflict detected with another user modification:");
+        pane.getChildren().add(label);
+
+        final HBox buttons = new HBox();
+        pane.getChildren().add(buttons);
+        buttons.setSpacing(10);
+        
+        final Button accept = new AwesomeButton(AwesomeIcon.OK_CIRCLE, "Accept incoming data");
         accept.setDefaultButton(true);
-        pane.getChildren().add(accept);
+        buttons.getChildren().add(accept);
         accept.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
             	result[0] = true;
-                dialog.close();
+                conflict.close();
             }
         });
         
-        final Button keep = new Button("Keep local changes");
+        final Button keep = new AwesomeButton(AwesomeIcon.BAN_CIRCLE, "Keep local changes");
         keep.setCancelButton(true);
-        pane.getChildren().add(keep);
+        buttons.getChildren().add(keep);
         keep.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
             	result[0] = false;
-                dialog.close();
+                conflict.close();
             }
         });
 
+        conflict.setOnShown(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent e) {
+            	conflict.setX(parent.getX() + (parent.getWidth() - conflict.getWidth()) / 2);
+            	conflict.setY(parent.getY() + (parent.getHeight() - conflict.getHeight()) / 2);
+			}
+		});
         
-        dialog.showAndWait();
+        conflict.showAndWait();
         
         return result[0];
 	}
