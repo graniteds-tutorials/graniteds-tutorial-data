@@ -1,19 +1,20 @@
 package org.graniteds.tutorial.data.services;
 
+import java.util.Map;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+
 import org.granite.tide.data.model.Page;
 import org.granite.tide.data.model.PageInfo;
 import org.graniteds.tutorial.data.entities.Account;
-
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.Map;
 
 // tag::service-impl[]
 @Stateless
 public class AccountServiceBean implements AccountService {
 
-    @PersistenceContext
+    @Inject
     private EntityManager entityManager;
 
     public void save(Account account) {
