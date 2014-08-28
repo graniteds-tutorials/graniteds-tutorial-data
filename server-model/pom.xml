@@ -50,13 +50,13 @@
 		
         <dependency>
             <groupId>org.graniteds</groupId>
-            <artifactId>granite-server-hibernate4</artifactId>
+            <artifactId>granite-server-eclipselink</artifactId>
             <version>${graniteds.version}</version>
         </dependency>
 		
         <dependency>
             <groupId>org.graniteds</groupId>
-            <artifactId>granite-server-eclipselink</artifactId>
+            <artifactId>granite-server-hibernate4</artifactId>
             <version>${graniteds.version}</version>
         </dependency>
         

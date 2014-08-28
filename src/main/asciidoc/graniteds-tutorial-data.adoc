@@ -57,9 +57,19 @@ mvn tomcat7:run-war
 ----
 endif::[]
 
-.WildFly 8
+.WildFly 8.1
 ----
 mvn wildfly:run
+----
+
+.GlassFish 4.0
+----
+mvn embedded-glassfish:run
+----
+
+.Apache TomEE 1.7
+----
+mvn tomee:run
 ----
 
 .JBoss AS 7.2
@@ -73,29 +83,6 @@ http://www.jboss.org/jbossas/downloads/[here] (it's named JBoss EAP 6.1.0.Final)
 ----
 mvn install:install-file -DgroupId=org.jboss.as -DartifactId=jboss-as-dist -Dversion=7.2.0.Final -Dpackaging=zip -Dfile=/path/to/jboss
 ----
-
-ifeval::["{server}" == "spring"]
-.GlassFish 3.1.2.2
-----
-mvn embedded-glassfish:run
-----
-
-.Apache TomEE 1.5
-----
-mvn tomee:run
-----
-endif::[]
-
-ifeval::["{server}" == "ejb"]
-NOTE: GlassFish and TomEE are not yet supported with this tutorial because EclipseLink and OpenJPA are not yet supported by the JMF
-encoding used with JavaFX. However the tutorial war can be deployed on a GlassFish / TomEE instance where Hibernate is setup as JPA
-provider.
-endif::[]
-ifeval::["{server}" == "cdi"]
-NOTE: GlassFish and TomEE are not yet supported with this tutorial because EclipseLink and OpenJPA are not yet supported by the JMF
-encoding used with JavaFX. However the tutorial war can be deployed on a GlassFish / TomEE instance where Hibernate is setup as JPA
-provider.
-endif::[]
 
 ifeval::["{client}" == "javafx"]
 Before launching the JavaFX client, it is first necessary to build a proper executable jar with the http://zenjava.com/javafx/maven/[Zenjava JavaFX plugin]:
