@@ -5,7 +5,7 @@ import org.granite.gravity.config.servlet3.MessagingDestination;
 import org.granite.tide.cdi.CDIConfigProvider;
 
 // tag::server-filter[]
-@ServerFilter(configProviderClass=CDIConfigProvider.class) // <1>
+@ServerFilter(configProviderClass=CDIConfigProvider.class, forceCreateSession=true) // <1>
 public class DataApplication {
 
     @MessagingDestination(noLocal=true, sessionSelector=true)
